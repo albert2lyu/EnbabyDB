@@ -11,8 +11,8 @@
 !var/logs/.gitkeep
 
 # Parameters
-/app/config/parameters.yml
-/app/config/parameters.ini
+#/app/config/parameters.yml
+#/app/config/parameters.ini
 
 # Managed by Composer
 /app/bootstrap.php.cache
@@ -32,3 +32,6 @@
 
 # Composer PHAR
 /composer.phar
+
+# Audios
+/web/AudioLib/*
