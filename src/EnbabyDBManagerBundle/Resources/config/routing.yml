@@ -1,0 +1,11 @@
+enbaby_db_manager_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: EnbabyDBManagerBundle:Default:index }
+
+enbaby_db_manager_index:
+    path:     /index
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:index }
+
+enbaby_db_manager_series:
+    path:     /series/{seriesId}
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:series,seriesId:new }

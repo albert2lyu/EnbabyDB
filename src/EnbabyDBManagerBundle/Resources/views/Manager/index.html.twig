@@ -1,0 +1,44 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+	  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	  <title></title>
+	</head>
+	<body>
+		<a href="{{path('enbaby_db_manager_series',{'seriesId':'new'})}}">Create New Series</a>
+		<ul>
+		{% for s in series%}
+		<li>
+			<table border="1">
+				<tr>
+					<td>ID</td>
+					<td><a href="{{path('enbaby_db_manager_series',{'seriesId':s.Id})}}" >{{s.Id}}</a></td>
+				</tr>
+				<tr>
+					<td>DisplayName</td>
+					<td>{{s.DisplayName}}</td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td>{{s.Description}}</td>
+				</tr>
+				<tr>
+					<td>BookNumber</td>
+					<td>{{s.BookNumber}}</td>
+				</tr>
+				<tr>
+					<td>PublishDate</td>
+					<td>{{s.PublishDate|date('Y-m-d')}}</td>
+				</tr>
+				<tr>
+					<td>Publisher</td>
+					<td>{{s.Publisher}}</td>				
+				</tr>
+			</table>
+		</li>
+		{%endfor%}
+	</ul>
+</body>
+</html>
+
