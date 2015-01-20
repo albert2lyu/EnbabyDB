@@ -3,14 +3,66 @@
 <html lang="en">
 	<head>
 	  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	  <title></title>
+	  <script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+	  <script type="text/javascript">
+	  	$(document).ready(function() {
+	  		$("#Save").click(function() {
+	  			$.post('{{path("enbaby_db_manager_seriesupdate")}}', 
+	  			{
+	  				Id : $("#Id").html(),
+	  				DisplayName : $("#DisplayName").val(),
+	  				Description : $("#Description").val(),
+	  				LinkToBuy : $("#LinkToBuy").val(),
+	  				Snapshot : null,
+	  				Rank : $("#Rank").val()
+
+	  			}, function(data, textStatus, xhr) {
+	  				/*optional stuff to do after success */
+	  				alert(textStatus);
+	  			});
+	  		});		
+	  	});
+	  </script>
+	  <title>{{series.Id}}</title>
 	</head>
 	<body>
-		<a href="{{path('enbaby_db_manager_index')}}">Return to index!</a>
-		<br/>
-		SeriesId:{{seriesId}} 
-		{{ form(form) }}	
-		{{updateSuccess}}
+		<div>
+			<h1>ID:<span id='Id'>{{series.Id}}</span></h1>
+		</div>
+		<div>Index Information</div>
+		<div>
+			<div>
+				<div>DisplayName</div>
+				<div><input id='DisplayName' value='{{series.DisplayName | default(" ")}}'></div>
+			</div>
+			<div>
+				<div>Description:</div>
+				<div><textarea rows='5' cols='80' id='Description'>{{series.Description | default(" ")}}</textarea></div>
+			</div>
+			<div>
+				<div>LinkToBuy</div>
+				<div><input id='LinkToBuy' value='{{series.LinkToBuy | default("www.amazon.cn")}}'></div>
+			</div>
+			<div>
+				<div>Snapshot</div>
+				<div></div>
+			</div>
+			<div>
+				<div>Rank</div>
+				<div><input id='Rank' value='{{series.Rank | default("100")}}'></div>
+			</div>
+		</div>
+		<div>
+			<table>
+				<tbody>
+					<tr>
+						<td><div id='Save'>Save</div></td>
+						<td><div id='Remove'>Remove</div></td>
+						<td><a href="{{path('enbaby_db_manager_index')}}">Return</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</body>
 </html>
 

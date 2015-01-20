@@ -13,22 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Books
 {
     /**
-     * @ORM\Column(name="Id", type="string", length=10)
-     * @ORM\Id
+     * @ORM\Column(name="ISBN", type="string", length=13)
+     . @ORM\Id
      */
-    protected $id;
+    protected $isbn;
 	
-	/**
-     * @ORM\Column(name="SeriesId", type="string", length=5)
-     */
-    protected $seriesId;
-
-	/**
-     * @ORM\Column(name="SubId", type="string", length=4)
-     */
-    protected $subId;
-
-	/**
+    /**
      * @ORM\Column(name="DisplayName", type="text")
      */
     protected $displayName;
@@ -37,80 +27,49 @@ class Books
      * @ORM\Column(name="Description", type="text")
      */
     protected $description;
+   
+    /**
+     * @ORM\Column(name="LinkToBuy", type="text")
+     */
+    protected $linkToBuy;
+
+    /**
+     * @ORM\Column(name="Snapshot", type="blob")
+     */
+    protected $snapshot;
 
     /**
      * @ORM\Column(name="Author", type="string",length=200)
      */
     protected $author;
+   
+    /**
+     * @ORM\Column(name="Rank", type="integer")
+     */
+    protected $rank;
 
 
     /**
-     * Set id
+     * Set isbn
      *
-     * @param string $id
+     * @param string $isbn
      * @return Books
      */
-    public function setId($id)
+    public function setIsbn($isbn)
     {
-        $this->id = $id;
+        $this->isbn = $isbn;
 
         return $this;
     }
 
     /**
-     * Get id
+     * Get isbn
      *
      * @return string 
      */
-    public function getId()
+    public function getIsbn()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set seriesId
-     *
-     * @param string $seriesId
-     * @return Books
-     */
-    public function setSeriesId($seriesId)
-    {
-        $this->seriesId = $seriesId;
-
-        return $this;
-    }
-
-    /**
-     * Get seriesId
-     *
-     * @return string 
-     */
-    public function getSeriesId()
-    {
-        return $this->seriesId;
-    }
-
-    /**
-     * Set subId
-     *
-     * @param string $subId
-     * @return Books
-     */
-    public function setSubId($subId)
-    {
-        $this->subId = $subId;
-
-        return $this;
-    }
-
-    /**
-     * Get subId
-     *
-     * @return string 
-     */
-    public function getSubId()
-    {
-        return $this->subId;
+        return $this->isbn;
     }
 
     /**
@@ -160,6 +119,52 @@ class Books
     }
 
     /**
+     * Set linkToBuy
+     *
+     * @param string $linkToBuy
+     * @return Books
+     */
+    public function setLinkToBuy($linkToBuy)
+    {
+        $this->linkToBuy = $linkToBuy;
+
+        return $this;
+    }
+
+    /**
+     * Get linkToBuy
+     *
+     * @return string 
+     */
+    public function getLinkToBuy()
+    {
+        return $this->linkToBuy;
+    }
+
+    /**
+     * Set snapshot
+     *
+     * @param string $snapshot
+     * @return Books
+     */
+    public function setSnapshot($snapshot)
+    {
+        $this->snapshot = $snapshot;
+
+        return $this;
+    }
+
+    /**
+     * Get snapshot
+     *
+     * @return string 
+     */
+    public function getSnapshot()
+    {
+        return $this->snapshot;
+    }
+
+    /**
      * Set author
      *
      * @param string $author
@@ -180,5 +185,28 @@ class Books
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * Set rank
+     *
+     * @param integer $rank
+     * @return Books
+     */
+    public function setRank($rank)
+    {
+        $this->rank = $rank;
+
+        return $this;
+    }
+
+    /**
+     * Get rank
+     *
+     * @return integer 
+     */
+    public function getRank()
+    {
+        return $this->rank;
     }
 }

@@ -1,0 +1,51 @@
+<?php
+
+namespace EnbabyDBManagerBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Books 
+ *
+ * @ORM\Table(name="Books")
+ * @ORM\Entity
+ */
+class Books
+{
+    /**
+     * @ORM\Column(name="ISBN", type="string", length=13)
+     . @ORM\Id
+     */
+    protected $isbn;
+	
+    /**
+     * @ORM\Column(name="DisplayName", type="text")
+     */
+    protected $displayName;
+
+    /**
+     * @ORM\Column(name="Description", type="text")
+     */
+    protected $description;
+   
+    /**
+     * @ORM\Column(name="LinkToBuy", type="text")
+     */
+    protected $linkToBuy;
+
+    /**
+     * @ORM\Column(name="Snapshot", type="blob")
+     */
+    protected $snapshot;
+
+    /**
+     * @ORM\Column(name="Author", type="string",length=200)
+     */
+    protected $author;
+   
+    /**
+     * @ORM\Column(name="Rank", type="integer")
+     */
+    protected $rank;
+
+}

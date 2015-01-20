@@ -18,7 +18,7 @@ class Series
      */
     protected $id;
 
-    /**
+	/**
      * @ORM\Column(name="DisplayName", type="text")
      */
     protected $displayName;
@@ -34,14 +34,16 @@ class Series
     protected $linkToBuy;
 
     /**
-     * @ORM\Column(name="Snapshot", type="blob")
+     * @ORM\Column(name="Snapshot", type="mediumblob")
      */
     protected $snapshot;
 
     /**
      * @ORM\Column(name="Rank", type="integer")
      */
-    protected $rank;
+    protected $publisher;
+
+
 
 
     /**
@@ -114,71 +116,71 @@ class Series
     }
 
     /**
-     * Set linkToBuy
+     * Set bookNumber
      *
-     * @param string $linkToBuy
+     * @param integer $bookNumber
      * @return Series
      */
-    public function setLinkToBuy($linkToBuy)
+    public function setBookNumber($bookNumber)
     {
-        $this->linkToBuy = $linkToBuy;
+        $this->bookNumber = $bookNumber;
 
         return $this;
     }
 
     /**
-     * Get linkToBuy
-     *
-     * @return string 
-     */
-    public function getLinkToBuy()
-    {
-        return $this->linkToBuy;
-    }
-
-    /**
-     * Set snapshot
-     *
-     * @param string $snapshot
-     * @return Series
-     */
-    public function setSnapshot($snapshot)
-    {
-        $this->snapshot = $snapshot;
-
-        return $this;
-    }
-
-    /**
-     * Get snapshot
-     *
-     * @return string 
-     */
-    public function getSnapshot()
-    {
-        return $this->snapshot;
-    }
-
-    /**
-     * Set rank
-     *
-     * @param integer $rank
-     * @return Series
-     */
-    public function setRank($rank)
-    {
-        $this->rank = $rank;
-
-        return $this;
-    }
-
-    /**
-     * Get rank
+     * Get bookNumber
      *
      * @return integer 
      */
-    public function getRank()
+    public function getBookNumber()
     {
-        return $this->rank;
+        return $this->bookNumber;
+    }
+
+    /**
+     * Set publishDate
+     *
+     * @param \DateTime $publishDate
+     * @return Series
+     */
+    public function setPublishDate($publishDate)
+    {
+        $this->publishDate = $publishDate;
+
+        return $this;
+    }
+
+    /**
+     * Get publishDate
+     *
+     * @return \DateTime 
+     */
+    public function getPublishDate()
+    {
+        return $this->publishDate;
+    }
+
+    /**
+     * Set publisher
+     *
+     * @param string $publisher
+     * @return Series
+     */
+    public function setPublisher($publisher)
+    {
+        $this->publisher = $publisher;
+
+        return $this;
+    }
+
+    /**
+     * Get publisher
+     *
+     * @return string 
+     */
+    public function getPublisher()
+    {
+        return $this->publisher;
     }
 }

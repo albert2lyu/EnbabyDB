@@ -1,0 +1,25 @@
+<?php
+
+namespace EnbabyDBManagerBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Links 
+ *
+ * @ORM\Table(name="Links")
+ * @ORM\Entity
+ */
+class Links
+{
+    /**
+     * @ORM\Column(name="ISBN", type="string", length=13)
+     */
+    protected $isbn;
+	
+    /**
+     * @ORM\Column(name="Series", type="string", length=5)
+     */
+    protected $series;
+
+}

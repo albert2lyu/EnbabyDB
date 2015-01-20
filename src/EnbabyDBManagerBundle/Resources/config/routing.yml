@@ -9,3 +9,7 @@ enbaby_db_manager_index:
 enbaby_db_manager_series:
     path:     /series/{seriesId}
     defaults: { _controller: EnbabyDBManagerBundle:Manager:series,seriesId:new }
+
+enbaby_db_manager_seriesupdate:
+    path:     /seriesupdate
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:seriesupdate }
