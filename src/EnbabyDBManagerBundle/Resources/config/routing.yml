@@ -13,3 +13,7 @@ enbaby_db_manager_series:
 enbaby_db_manager_seriesupdate:
     path:     /seriesupdate
     defaults: { _controller: EnbabyDBManagerBundle:Manager:seriesupdate }
+
+enbaby_db_manager_seriesupload:
+    path:     /seriesupload
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:seriesupload }

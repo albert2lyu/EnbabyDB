@@ -50,7 +50,7 @@
 		$.ajaxFileUpload
 		(
 			{
-				url:'/doajaxfileupload.php', 
+				url:"{{path('enbaby_db_manager_seriesupload')}}", 
 				secureuri:false,
 				fileElementId:'fileToUpload',
 				dataType: 'json',
@@ -100,7 +100,7 @@
 				<div><input id='LinkToBuy' value='{{series.LinkToBuy | default("www.amazon.cn")}}'></div>
 			</div>
 			<div>
-				<div>Snapshot</div>
+				<div><img id='Snapshot' src='{{series.Snapshot | default("/img/none.png")}}'></div>
 				<div><input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input"></div>
 				<div><button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button></div>
 			</div>

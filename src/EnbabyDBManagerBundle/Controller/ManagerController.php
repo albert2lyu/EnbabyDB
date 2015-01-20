@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use EnbabyDBManagerBundle\Entity\Series;
 require('AudioDB.php');
 
+
+
 class ManagerController extends Controller
 {
     public function indexAction()
@@ -60,6 +62,22 @@ class ManagerController extends Controller
 
 	
     }
+	
+    public function seriesuploadAction(Request $request)
+    {
+	$fileElementName = 'fileToUpload';
+	$uploadFile = $request->files->get($fileElementName);
+	if($uploadFile->isValid())
+	{
+		$file = $uploadFile->move(DBROOT,$uploadFile->getClientOriginalName() );
+		return new Response("{msg: '" . DBROOT . $_FILES["fileToUpload"]["name"] . "'}");
+
+	}else{
+		return new Response("{error: 'Failed'}");
+	}
+    }
+
+
 
 
     public function getNextSeriesId()
