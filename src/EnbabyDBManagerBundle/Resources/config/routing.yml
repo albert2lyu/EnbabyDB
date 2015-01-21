@@ -3,8 +3,8 @@ enbaby_db_manager_homepage:
     defaults: { _controller: EnbabyDBManagerBundle:Default:index }
 
 enbaby_db_manager_index:
-    path:     /index
-    defaults: { _controller: EnbabyDBManagerBundle:Manager:index }
+    path:     /series
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:seriesindex }
 
 enbaby_db_manager_series:
     path:     /series/{seriesId}
@@ -17,3 +17,33 @@ enbaby_db_manager_seriesupdate:
 enbaby_db_manager_seriesupload:
     path:     /seriesupload
     defaults: { _controller: EnbabyDBManagerBundle:Manager:seriesupload }
+
+enbaby_db_manager_seriesremove:
+    path:     /seriesremove
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:seriesremove }
+
+enbaby_db_manager_bookindex: 
+    path:     /books
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:bookindex }
+
+enbaby_db_manager_book:
+    path:     /book/{isbn}
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:book }
+
+
+enbaby_db_manager_bookupdate: 
+    path:     /bookupdate
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:bookindex }
+
+enbaby_db_manager_bookremove: 
+    path:     /bookremove
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:bookindex }
+
+enbaby_db_manager_bookaudioupload:
+    path:     /bookaudioupload
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:seriesremove }
+
+enbaby_db_manager_booksnapshotupload:
+    path:     /booksnapshotupload
+    defaults: { _controller: EnbabyDBManagerBundle:Manager:bookindex }
+

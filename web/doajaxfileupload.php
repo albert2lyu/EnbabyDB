@@ -51,7 +51,7 @@
       			{
       				move_uploaded_file($_FILES["fileToUpload"]["tmp_name"],
       				"uploads/" . $_FILES["fileToUpload"]["name"]);
-      				$msg .=  "Stored in: " . "/uploads/" . $_FILES["fileToUpload"]["name"];
+      				$msg .=  "Stored in: " . "uploads/" . $_FILES["fileToUpload"]["name"];
       			}	
 	}		
 	echo "{";

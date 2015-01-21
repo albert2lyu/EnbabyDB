@@ -43,15 +43,15 @@
 			//for security reason, we force to remove all uploaded file
 			//@unlink($_FILES['fileToUpload']);
 
-			if (file_exists( "/uploads/" . $_FILES["file"]["name"]))
+			if (file_exists( "/var/www/EnbabyDB/web/uploads/" . $_FILES["file"]["name"]))
       			{
      				$error .=   $_FILES["fileToUpload"]["name"] . " already exists. ";
       			}
     			else
       			{
       				move_uploaded_file($_FILES["fileToUpload"]["tmp_name"],
-      				"uploads/" . $_FILES["fileToUpload"]["name"]);
-      				$msg .=  "Stored in: " . "/uploads/" . $_FILES["fileToUpload"]["name"];
+      				"/var/www/EnbabyDB/web/uploads/" . $_FILES["fileToUpload"]["name"]);
+      				$msg .=  "Stored in: " . "/var/www/EnbabyDB/web/uploads/" . $_FILES["fileToUpload"]["name"];
       			}	
 	}		
 	echo "{";

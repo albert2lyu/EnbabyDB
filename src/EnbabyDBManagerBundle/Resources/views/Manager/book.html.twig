@@ -6,19 +6,23 @@
 	  <script type="text/javascript" src="/js/ajaxfileupload.js"></script>
 	  <script type="text/javascript">
 
+	  function joinAudioFiles()
+	  {
+
+	  }
+
 
 	  	$(document).ready(function() {
-	  		
-
-
 	  		$("#Save").click(function() {
-	  			$.post('{{path("enbaby_db_manager_seriesupdate")}}', 
+	  			$.post('{{path("enbaby_db_manager_bookupdate")}}', 
 	  			{
-	  				Id : $("#Id").html(),
+	  				ISBN : $("#ISBN").val(),
 	  				DisplayName : $("#DisplayName").val(),
 	  				Description : $("#Description").val(),
 	  				LinkToBuy : $("#LinkToBuy").val(),
 	  				Snapshot : $("#Snapshot").attr('src'),
+	  				Author : $("#Author").val(),
+	  				AudioFiles: joinAudioFiles(),
 	  				Rank : $("#Rank").val()
 
 	  			}, function(data, textStatus, xhr) {
@@ -28,9 +32,9 @@
 	  		});		
 
 	  		$("#Remove").click(function() {
-	  			$.post('{{path("enbaby_db_manager_seriesremove")}}', 
+	  			$.post('{{path("enbaby_db_manager_bookremove")}}', 
 	  			{
-	  				Id : $("#Id").html()
+	  				ISBN : $("#ISBN").val()
 	  			}, function(data, textStatus, xhr) {
 	  				/*optional stuff to do after success */
 	  				if(data.MSG =='1')
@@ -43,8 +47,8 @@
 	  		});		
 	  	});
 
-	  	function ajaxFileUpload()
-				{
+	  	function ajaxFileUpload(loadtype)
+			{
 					//starting setting some animation when the ajax starts and completes
 					$("#loading")
 					.ajaxStart(function(){
@@ -53,6 +57,16 @@
 					.ajaxComplete(function(){
 						$(this).hide();
 					});
+					var uploadUrl;
+					if(loadtype == 'Audio') 
+					{
+						uploadUrl = {{path('enbaby_db_manager_bookaudioupload')}};
+					}
+
+					if(loadtype == 'Snapshot') 
+					{
+						uploadUrl = {{path('enbaby_db_manager_booksnapshotupload')}};
+					}
 		
 		/*
 			prepareing ajax file upload
@@ -67,8 +81,7 @@
 		$.ajaxFileUpload
 		(
 			{
-				url:"{{path('enbaby_db_manager_seriesupload')}}", 
-				//url:"/doajaxfileupload.php", 
+				url: uploadUrl, 
 				secureuri:false,
 				fileElementId:'fileToUpload',
 				dataType: 'json',
@@ -98,34 +111,41 @@
 	}  
 
 	  </script>
-	  <title>{{series.Id}}</title>
+	  <title>{{book.ISBN}}</title>
 	</head>
 	<body>
 		<div>
-			<h1>ID:<span id='Id'>{{series.Id}}</span></h1>
+			<div>ISBN</div>
+			<div>
+				<input id='ISBN' value='{{book.ISBN}}'>
+			</div>
 		</div>
-		<div>Index Information</div>
+
 		<div>
 			<div>
 				<div>DisplayName</div>
-				<div><input id='DisplayName' value='{{series.DisplayName | default(" ")}}'></div>
+				<div><input id='DisplayName' value='{{book.DisplayName}}'></div>
 			</div>
 			<div>
 				<div>Description:</div>
-				<div><textarea rows='5' cols='80' id='Description'>{{series.Description | default(" ")}}</textarea></div>
+				<div><textarea rows='5' cols='80' id='Description'>{{book.Description}}</textarea></div>
 			</div>
 			<div>
 				<div>LinkToBuy</div>
-				<div><input id='LinkToBuy' value='{{series.LinkToBuy | default("www.amazon.cn")}}'></div>
+				<div><input id='LinkToBuy' value='{{book.LinkToBuy | default("www.amazon.cn")}}'></div>
 			</div>
 			<div>
-				<div><img id='Snapshot' src='{{series.Snapshot | default("/img/none.png")}}'></div>
+				<div><img id='Snapshot' src='{{book.Snapshot | default("/img/none.png")}}'></div>
 				<div><input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input"></div>
 				<div><button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button></div>
 			</div>
 			<div>
+				<div>Author</div>
+				<div><input id='Author' value='{{book.Author}}'></div>
+			</div>
+			<div>
 				<div>Rank</div>
-				<div><input id='Rank' value='{{series.Rank | default("100")}}'></div>
+				<div><input id='Rank' value='{{book.Rank | default("100")}}'></div>
 			</div>
 		</div>
 		<div>
@@ -134,7 +154,7 @@
 					<tr>
 						<td><div id='Save'>Save</div></td>
 						<td><div id='Remove'>Remove</div></td>
-						<td><a href="{{path('enbaby_db_manager_index')}}">Return</a></td>
+						<td><a href="{{path('enbaby_db_manager_bookindex')}}">Return</a></td>
 					</tr>
 				</tbody>
 			</table>

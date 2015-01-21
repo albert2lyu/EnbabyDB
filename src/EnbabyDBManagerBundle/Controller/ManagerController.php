@@ -4,14 +4,78 @@ namespace EnbabyDBManagerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use EnbabyDBManagerBundle\Entity\Series;
-require('AudioDB.php');
+use EnbabyDBManagerBundle\Entity\Books;
 
+DEFINE("WEBROOT","/var/www/EnbabyDB/web");
+DEFINE("SnapshotDB","/AudioLib/snapshots/");
 
 
 class ManagerController extends Controller
 {
-    public function indexAction()
+    public function bookindexAction()
+    {
+	$em = $this->getDoctrine()->getManager();
+	$query = $em->createQuery('SELECT book.isbn FROM EnbabyDBManagerBundle:Books book');
+	$bookindex = $query->getResult();
+	
+	return $this->render('EnbabyDBManagerBundle:Manager:bookindex.html.twig',array('bookindex' => $bookindex));	
+
+    }
+
+    public function bookAction($isbn)
+    {
+	$book = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Books')->find($isbn);
+
+	if(!$book)
+	{
+		$book = new Books();
+	}
+	return $this->render('EnbabyDBManagerBundle:Manager:book.html.twig',array('book' => $book));
+    }
+
+    public function bookupdateAction(Request $request)
+    {
+
+
+        $isbn = $request->request->get('ISBN','NULL');
+        if($isbn == 'NULL')
+        {
+                $response = new Response(json_encode(array('MSG' => '-1')));
+                $response->headers->set('Content-Type', 'application/json');
+                return $response;
+        }
+        $em = $this->getDoctrine()->getManager();
+        $book = $em->getRepository('EnbabyDBManagerBundle:Books')->find($isbn);
+        $new = null;
+        if(!$book)
+        {
+                $book = new Books();
+                $new = 1;
+        }
+        $book->setISBN($isbn);
+        $book->setDisplayName($request->request->get('DisplayName'));
+        $book->setDescription($request->request->get('Description'));
+        $book->setLinkToBuy($request->request->get('LinkToBuy'));
+        $book->setSnapshot($request->request->get('Snapshot'));
+	$book->setAuthor($request->request->get('Author'));
+	$book->setAudioFiles($request->request->get('AudioFiles'));
+        $book->setRank($request->request->get('Rank'));
+
+        if($new) $em->persist($book);
+        $em->flush();
+
+        $response = new Response(json_encode(array('MSG' => '1')));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+
+    }
+
+
+
+
+    public function seriesindexAction()
     {
 	$series = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findAll();
 		
@@ -33,12 +97,43 @@ class ManagerController extends Controller
 	return $this->render('EnbabyDBManagerBundle:Manager:series.html.twig',array('series'=>$series));
     }
 
+    public function seriesremoveAction(Request $request)
+    {
+	$seriesId = $request->request->get('Id','NULL');
+	if($seriesId =='NULL')
+	{
+		$response = new Response(json_encode(array('MSG' => '-1')));
+	}else{
+		$em = $this->getDoctrine()->getManager();
+        	$series = $em->getRepository('EnbabyDBManagerBundle:Series')->find($seriesId);
+
+		if(!$series)
+		{
+			$response = new Response(json_encode(array('MSG' => '-1')));	
+		}else{
+			$em->remove($series);
+			$em->flush();
+			$response = new Response(json_encode(array('MSG' => '1')));
+		}
+		$response->headers->set('Content-Type', 'application/json');
+	}
+	return $response;
+	
+}
+	
+	
 
     public function seriesupdateAction(Request $request)
     {
+
+
 	$seriesId = $request->request->get('Id','NULL');
 	if($seriesId == 'NULL')
-		return $this->render('EnbabyDBManagerBundle:Manager:error.html.twig',array('errorMSG' => 'Update Failed'));
+	{
+		$response = new Response(json_encode(array('MSG' => '-1')));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
+	}
 	$em = $this->getDoctrine()->getManager();
 	$series = $em->getRepository('EnbabyDBManagerBundle:Series')->find($seriesId);
 	$new = null;
@@ -54,12 +149,12 @@ class ManagerController extends Controller
 	$series->setSnapshot($request->request->get('Snapshot'));
 	$series->setRank($request->request->get('Rank'));
 
-	$em = $this->getDoctrine()->getManager();
 	if($new) $em->persist($series);
 	$em->flush();
 	
-	return $this->render('EnbabyDBManagerBundle:Manager:error.html.twig',array('errorMSG' => 'Update good!'));
-
+	$response = new Response(json_encode(array('MSG' => '1')));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
 	
     }
 	
@@ -69,12 +164,15 @@ class ManagerController extends Controller
 	$uploadFile = $request->files->get($fileElementName);
 	if($uploadFile->isValid())
 	{
-		$file = $uploadFile->move(DBROOT,$uploadFile->getClientOriginalName() );
-		return new Response("{msg: '" . DBROOT . $_FILES["fileToUpload"]["name"] . "'}");
+		$timeStamp = md5(time() . $uploadFile->getClientOriginalName());
+		$localFileName = $timeStamp . '.' . $uploadFile->guessExtension();
+		$file = $uploadFile->move(WEBROOT . SnapshotDB , $localFileName );
+		$response = new Response(json_encode(array('MSG' => '1', 'Location' =>  SnapshotDB . $localFileName)));
 
 	}else{
-		return new Response("{error: 'Failed'}");
+		$response = new Response(json_encode(array('MSG'=> '-1')));
 	}
+	return $response;
     }
 
 

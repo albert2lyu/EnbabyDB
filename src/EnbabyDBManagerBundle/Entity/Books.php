@@ -34,7 +34,7 @@ class Books
     protected $linkToBuy;
 
     /**
-     * @ORM\Column(name="Snapshot", type="text")
+     * @ORM\Column(name="Snapshot", type="blob")
      */
     protected $snapshot;
 
@@ -42,6 +42,11 @@ class Books
      * @ORM\Column(name="Author", type="string",length=200)
      */
     protected $author;
+
+    /**
+     * @ORM\Column(name="AudioFiles", type="text")
+     */
+    protected $audioFiles;
    
     /**
      * @ORM\Column(name="Rank", type="integer")
@@ -185,6 +190,29 @@ class Books
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * Set audioFiles
+     *
+     * @param string $audioFiles
+     * @return Books
+     */
+    public function setAudioFiles($audioFiles)
+    {
+        $this->audioFiles = $audioFiles;
+
+        return $this;
+    }
+
+    /**
+     * Get audioFiles
+     *
+     * @return string 
+     */
+    public function getAudioFiles()
+    {
+        return $this->audioFiles;
     }
 
     /**
