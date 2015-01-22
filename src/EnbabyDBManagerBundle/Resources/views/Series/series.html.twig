@@ -12,7 +12,7 @@
 
 
 	  		$("#Save").click(function() {
-	  			$.post('{{path("enbaby_db_manager_seriesupdate")}}', 
+	  			$.post('{{path("series_update")}}', 
 	  			{
 	  				Id : $("#Id").html(),
 	  				DisplayName : $("#DisplayName").val(),
@@ -28,7 +28,7 @@
 	  		});		
 
 	  		$("#Remove").click(function() {
-	  			$.post('{{path("enbaby_db_manager_seriesremove")}}', 
+	  			$.post('{{path("series_remove")}}', 
 	  			{
 	  				Id : $("#Id").html()
 	  			}, function(data, textStatus, xhr) {
@@ -67,7 +67,7 @@
 		$.ajaxFileUpload
 		(
 			{
-				url:"{{path('enbaby_db_manager_seriesupload')}}", 
+				url:"{{path('series_snapshotupload')}}", 
 				//url:"/doajaxfileupload.php", 
 				secureuri:false,
 				fileElementId:'fileToUpload',
@@ -108,11 +108,11 @@
 		<div>
 			<div>
 				<div>DisplayName</div>
-				<div><input id='DisplayName' value='{{series.DisplayName | default(" ")}}'></div>
+				<div><input id='DisplayName' value='{{series.DisplayName}}'></div>
 			</div>
 			<div>
 				<div>Description:</div>
-				<div><textarea rows='5' cols='80' id='Description'>{{series.Description | default(" ")}}</textarea></div>
+				<div><textarea rows='5' cols='80' id='Description'>{{series.Description}}</textarea></div>
 			</div>
 			<div>
 				<div>LinkToBuy</div>
@@ -134,7 +134,7 @@
 					<tr>
 						<td><div id='Save'>Save</div></td>
 						<td><div id='Remove'>Remove</div></td>
-						<td><a href="{{path('enbaby_db_manager_index')}}">Return</a></td>
+						<td><a href="{{path('series_index')}}">Return</a></td>
 					</tr>
 				</tbody>
 			</table>

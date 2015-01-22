@@ -6,14 +6,14 @@
 	  <title></title>
 	</head>
 	<body>
-		<a href="{{path('enbaby_db_manager_series',{'seriesId':'new'})}}">Create New Series</a>
+		<a href="{{path('series_info',{'seriesId':'newseries'})}}">Create New Series</a>
 		<ul>
 		{% for s in series%}
 		<li>
 			<table border="1">
 				<tr>
 					<td>ID</td>
-					<td><a href="{{path('enbaby_db_manager_series',{'seriesId':s.Id})}}" >{{s.Id}}</a></td>
+					<td><a href="{{path('series_info',{'seriesId':s.Id})}}" >{{s.Id}}</a></td>
 				</tr>
 				<tr>
 					<td>DisplayName</td>

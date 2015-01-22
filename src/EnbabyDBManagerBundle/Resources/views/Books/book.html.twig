@@ -4,23 +4,83 @@
 	  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	  <script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
 	  <script type="text/javascript" src="/js/ajaxfileupload.js"></script>
+	  <!-- Latest compiled and minified CSS -->
+		<link href="/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Optional theme -->
+		<link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="/js/bootstrap.min.js"></script>
+
 	  <script type="text/javascript">
 
 	  function joinAudioFiles()
 	  {
+	  	var audios = $("#AudioFiles").find("audio");
+	  	var source = new Array();
+	  	for(var i=0;i<audios.length;i++)
+	  	{
+	  		if(audios[i].getAttribute('data-valid') == 'true')
+	  		{
+	  			source[i] = audios[i].getAttribute('data-src');
+	  		}
+	  		
+	  	}
+	  	return source.join(';');
+	  }
 
+	  function expandAudioFiles(sources)
+	  {
+	  	var source = sources.split(';');
+	  	for (var i = 0; i < source.length; i++) {
+	  		addAudio(source[i]);
+	  	}
+	  }
+
+	  function addAudio(source)
+	  {
+	  	if(source!=''){
+	  		var container = $("<div></div>");
+	  		var removeBtn = $("<button type='button' class='remove-audio-btn btn-xs '><span class='glyphicon glyphicon-trash'></span>remove</button>");
+	  		var audio = $("<audio data-valid='true' controls='controls'></audio>");
+	  		audio.attr('src',source);
+	  		audio.attr('data-src',source);
+	  		container.append(audio);
+	  		container.append(removeBtn);
+	  		$("#AudioFiles").append(container);
+	  	}
+	  	
 	  }
 
 
 	  	$(document).ready(function() {
+
+
+	  		expandAudioFiles("{{book.AudioFiles}}");
+
+	  		$(document).on('click','.remove-audio-btn',function  () {
+	  			// body..
+	  			var audio = $(this).siblings("audio");
+	  			if(audio.attr('data-valid')=='true') {
+	  				audio.attr('data-valid','false');
+	  				$(this).addClass('btn-danger');
+	  			}else{
+	  				audio.attr('data-valid','true');
+	  				$(this).removeClass('btn-danger');
+	  			}
+	  		});
+
+
+
 	  		$("#Save").click(function() {
-	  			$.post('{{path("enbaby_db_manager_bookupdate")}}', 
+	  			$.post('{{path("books_update")}}', 
 	  			{
 	  				ISBN : $("#ISBN").val(),
 	  				DisplayName : $("#DisplayName").val(),
 	  				Description : $("#Description").val(),
 	  				LinkToBuy : $("#LinkToBuy").val(),
-	  				Snapshot : $("#Snapshot").attr('src'),
+	  				Snapshot : $("#Snapshotimg").attr('src'),
 	  				Author : $("#Author").val(),
 	  				AudioFiles: joinAudioFiles(),
 	  				Rank : $("#Rank").val()
@@ -32,7 +92,7 @@
 	  		});		
 
 	  		$("#Remove").click(function() {
-	  			$.post('{{path("enbaby_db_manager_bookremove")}}', 
+	  			$.post('{{path("books_remove")}}', 
 	  			{
 	  				ISBN : $("#ISBN").val()
 	  			}, function(data, textStatus, xhr) {
@@ -60,12 +120,12 @@
 					var uploadUrl;
 					if(loadtype == 'Audio') 
 					{
-						uploadUrl = {{path('enbaby_db_manager_bookaudioupload')}};
+						uploadUrl = "{{path('books_audioupload')}}";
 					}
 
 					if(loadtype == 'Snapshot') 
 					{
-						uploadUrl = {{path('enbaby_db_manager_booksnapshotupload')}};
+						uploadUrl = "{{path('books_snapshotupload')}}";
 					}
 		
 		/*
@@ -75,15 +135,14 @@
 			dataType: it support json, xml
 			secureuri:use secure protocol
 			success: call back function when the ajax complete
-			error: callback function when the ajax failed
-			
+			error: callback function when the ajax failed		
                 */
 		$.ajaxFileUpload
 		(
 			{
 				url: uploadUrl, 
 				secureuri:false,
-				fileElementId:'fileToUpload',
+				fileElementId:loadtype,
 				dataType: 'json',
 				success: function (data, status)
 				{
@@ -92,7 +151,14 @@
 						if(data.MSG == '1')
 						{
 							alert(data.Location);
-							$("#Snapshot").attr('src',data.Location);
+							if(loadtype == 'Snapshot')
+							{
+								$("#Snapshotimg").attr('src',data.Location);
+							}
+							if(loadtype == 'Audio')
+							{
+								addAudio(data.Location);
+							}
 						}else
 						{
 							alert("Upload failed!");
@@ -113,7 +179,7 @@
 	  </script>
 	  <title>{{book.ISBN}}</title>
 	</head>
-	<body>
+	<body class="container">
 		<div>
 			<div>ISBN</div>
 			<div>
@@ -135,13 +201,19 @@
 				<div><input id='LinkToBuy' value='{{book.LinkToBuy | default("www.amazon.cn")}}'></div>
 			</div>
 			<div>
-				<div><img id='Snapshot' src='{{book.Snapshot | default("/img/none.png")}}'></div>
-				<div><input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input"></div>
-				<div><button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button></div>
+				<div><img id='Snapshotimg' src='{{book.Snapshot | default("/img/none.png")}}'></div>
+				<div><input id="Snapshot" type="file"  name="Snapshot" class="input"></div>
+				<div><button class="button" id="SnapshotUpload" onclick="return ajaxFileUpload('Snapshot');">Upload</button></div>
 			</div>
 			<div>
 				<div>Author</div>
 				<div><input id='Author' value='{{book.Author}}'></div>
+			</div>
+			<div id="AudioFiles">
+			</div>
+			<div>
+				<input id="Audio" type="file"  name="Audio" class="input">
+				<button class="button" id="AudioUpload" onclick="return ajaxFileUpload('Audio');">Upload</button>
 			</div>
 			<div>
 				<div>Rank</div>
@@ -154,7 +226,7 @@
 					<tr>
 						<td><div id='Save'>Save</div></td>
 						<td><div id='Remove'>Remove</div></td>
-						<td><a href="{{path('enbaby_db_manager_bookindex')}}">Return</a></td>
+						<td><a href="{{path('books_index')}}">Return</a></td>
 					</tr>
 				</tbody>
 			</table>

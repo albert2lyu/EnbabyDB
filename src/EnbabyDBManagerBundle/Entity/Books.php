@@ -34,7 +34,7 @@ class Books
     protected $linkToBuy;
 
     /**
-     * @ORM\Column(name="Snapshot", type="blob")
+     * @ORM\Column(name="Snapshot", type="text")
      */
     protected $snapshot;
 
