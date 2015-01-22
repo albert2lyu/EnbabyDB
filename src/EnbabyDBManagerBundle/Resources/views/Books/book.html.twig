@@ -1,238 +1,243 @@
-<!DOCTYPE HTML>
-<html lang="en">
-	<head>
-	  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	  <script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
-	  <script type="text/javascript" src="/js/ajaxfileupload.js"></script>
-	  <!-- Latest compiled and minified CSS -->
-		<link href="/css/bootstrap.min.css" rel="stylesheet">
+{% extends '::base.html.twig' %}
 
-		<!-- Optional theme -->
-		<link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+{% block title %}{{book.ISBN}}{%endblock%}
 
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="/js/bootstrap.min.js"></script>
+{%block javascript %}
+<script type="text/javascript" >  
+function joinAudioFiles()
+{
+	var audios = $("#AudioFiles").find("audio");
+	var source = new Array();
+	for(var i=0;i<audios.length;i++)
+	{
+		if(audios[i].getAttribute('data-valid') == 'true')
+		{
+			source[i] = audios[i].getAttribute('data-src');
+		}  		
+	}
+	return source.join(';');
+}
 
-	  <script type="text/javascript">
+function expandAudioFiles(sources)
+{
+	var source = sources.split(';');
+	for (var i = 0; i < source.length; i++) 
+	{
+		addAudio(source[i]);
+	}
+}
 
-	  function joinAudioFiles()
-	  {
-	  	var audios = $("#AudioFiles").find("audio");
-	  	var source = new Array();
-	  	for(var i=0;i<audios.length;i++)
-	  	{
-	  		if(audios[i].getAttribute('data-valid') == 'true')
-	  		{
-	  			source[i] = audios[i].getAttribute('data-src');
-	  		}
-	  		
+function addAudio(source)
+{
+	if(source!=''){
+		var container = $("<div style='position:relative'></div>");
+		var removeBtn = $("<button type='button' class='remove-audio-btn btn-xs btn-primary' style='position:absolute;top:0;right:0'><span class='glyphicon glyphicon-trash'></span></button>");
+		var audio = $("<audio data-valid='true' controls='controls'></audio>");
+		audio.attr('src',source);
+		audio.attr('data-src',source);
+		container.append(audio);
+		container.append(removeBtn);
+		$("#AudioFiles").append(container);
+	}
+}
+
+$(document).ready(function() {
+	expandAudioFiles("{{book.AudioFiles}}");
+	$(document).on('click','.remove-audio-btn',function  () {
+	  	var audio = $(this).siblings("audio");
+	  	if(audio.attr('data-valid')=='true') {
+	  		audio.attr('data-valid','false');
+	  		$(this).removeClass('btn-primary')
+	  		$(this).addClass('btn-danger');
+	  	}else{
+	  		audio.attr('data-valid','true');
+	  		$(this).removeClass('btn-danger');
+	  		$(this).addClass('btn-primary');
 	  	}
-	  	return source.join(';');
-	  }
-
-	  function expandAudioFiles(sources)
-	  {
-	  	var source = sources.split(';');
-	  	for (var i = 0; i < source.length; i++) {
-	  		addAudio(source[i]);
-	  	}
-	  }
-
-	  function addAudio(source)
-	  {
-	  	if(source!=''){
-	  		var container = $("<div></div>");
-	  		var removeBtn = $("<button type='button' class='remove-audio-btn btn btn-primary'><span class='glyphicon glyphicon-trash'></span></button>");
-	  		var audio = $("<audio data-valid='true' controls='controls'></audio>");
-	  		audio.attr('src',source);
-	  		audio.attr('data-src',source);
-	  		container.append(audio);
-	  		container.append(removeBtn);
-	  		$("#AudioFiles").append(container);
-	  	}
-	  	
-	  }
+	  });
 
 
-	  	$(document).ready(function() {
+$("#Save").click(function() {
+	$.post('{{path("books_update")}}', 
+	{
+		ISBN : $("#ISBN").val(),
+		DisplayName : $("#DisplayName").val(),
+		Description : $("#Description").val(),
+		LinkToBuy : $("#LinkToBuy").val(),
+		Snapshot : $("#Snapshotimg").attr('src'),
+		Author : $("#Author").val(),
+		AudioFiles: joinAudioFiles(),
+		Rank : $("#Rank").val()
+	}, 
+	function(data, textStatus, xhr) {
+	  	alert(textStatus);
+	});
+});		
 
+$("#Remove").click(function() {
+	$.post('{{path("books_remove")}}', 
+	{
+		ISBN : $("#ISBN").val()
+	}, function(data, textStatus, xhr) {
+		if(data.MSG =='1')
+		{
+			alert("Remove successfully!");
+		}else{
+			alert("Remove failed!");
+		}
+	});
+});	
 
-	  		expandAudioFiles("{{book.AudioFiles}}");
+});
 
-	  		$(document).on('click','.remove-audio-btn',function  () {
-	  			// body..
-	  			var audio = $(this).siblings("audio");
-	  			if(audio.attr('data-valid')=='true') {
-	  				audio.attr('data-valid','false');
-	  				$(this).removeClass('btn-primary')
-	  				$(this).addClass('btn-danger');
-	  			}else{
-	  				audio.attr('data-valid','true');
-	  				$(this).removeClass('btn-danger');
-	  				$(this).addClass('btn-primary');
-	  			}
-	  		});
-
-
-
-	  		$("#Save").click(function() {
-	  			$.post('{{path("books_update")}}', 
-	  			{
-	  				ISBN : $("#ISBN").val(),
-	  				DisplayName : $("#DisplayName").val(),
-	  				Description : $("#Description").val(),
-	  				LinkToBuy : $("#LinkToBuy").val(),
-	  				Snapshot : $("#Snapshotimg").attr('src'),
-	  				Author : $("#Author").val(),
-	  				AudioFiles: joinAudioFiles(),
-	  				Rank : $("#Rank").val()
-
-	  			}, function(data, textStatus, xhr) {
-	  				/*optional stuff to do after success */
-	  				alert(textStatus);
-	  			});
-	  		});		
-
-	  		$("#Remove").click(function() {
-	  			$.post('{{path("books_remove")}}', 
-	  			{
-	  				ISBN : $("#ISBN").val()
-	  			}, function(data, textStatus, xhr) {
-	  				/*optional stuff to do after success */
-	  				if(data.MSG =='1')
-	  				{
-	  					alert("Remove successfully!");
-	  				}else{
-	  					alert("Remove failed!");
-	  				}
-	  			});
-	  		});		
-	  	});
-
-	  	function ajaxFileUpload(loadtype)
+function ajaxFileUpload(loadtype)
+{
+	//starting setting some animation when the ajax starts and completes
+	$("#loading")
+	.ajaxStart(function(){
+		$(this).show();
+	})
+	.ajaxComplete(function(){
+		$(this).hide();
+	});
+	var uploadUrl;
+	if(loadtype == 'Audio') 
+	{
+		uploadUrl = "{{path('books_audioupload')}}";
+	}
+	if(loadtype == 'Snapshot') 
+	{
+		uploadUrl = "{{path('books_snapshotupload')}}";
+	}
+	$.ajaxFileUpload
+	({
+		url: uploadUrl, 
+		secureuri:false,
+		fileElementId:loadtype,
+		dataType: 'json',
+		success: function (data, status)
+		{
+			if(typeof(data.MSG) != 'undefined')
 			{
-					//starting setting some animation when the ajax starts and completes
-					$("#loading")
-					.ajaxStart(function(){
-						$(this).show();
-					})
-					.ajaxComplete(function(){
-						$(this).hide();
-					});
-					var uploadUrl;
-					if(loadtype == 'Audio') 
-					{
-						uploadUrl = "{{path('books_audioupload')}}";
-					}
-
-					if(loadtype == 'Snapshot') 
-					{
-						uploadUrl = "{{path('books_snapshotupload')}}";
-					}
-		
-		/*
-			prepareing ajax file upload
-			url: the url of script file handling the uploaded files
-      fileElementId: the file type of input element id and it will be the index of  $_FILES Array()
-			dataType: it support json, xml
-			secureuri:use secure protocol
-			success: call back function when the ajax complete
-			error: callback function when the ajax failed		
-                */
-		$.ajaxFileUpload
-		(
-			{
-				url: uploadUrl, 
-				secureuri:false,
-				fileElementId:loadtype,
-				dataType: 'json',
-				success: function (data, status)
+				if(data.MSG == '1')
 				{
-					if(typeof(data.MSG) != 'undefined')
+					alert(data.Location);
+					if(loadtype == 'Snapshot')
 					{
-						if(data.MSG == '1')
-						{
-							alert(data.Location);
-							if(loadtype == 'Snapshot')
-							{
-								$("#Snapshotimg").attr('src',data.Location);
-							}
-							if(loadtype == 'Audio')
-							{
-								addAudio(data.Location);
-							}
-						}else
-						{
-							alert("Upload failed!");
-						}
+						$("#Snapshotimg").attr('src',data.Location);
 					}
-				},
-				error: function (data, status, e)
+					if(loadtype == 'Audio')
+					{
+						addAudio(data.Location);
+					}
+				}else
 				{
-					alert(e);
+					alert("Upload failed!");
 				}
 			}
-		)
+		},
+		error: function (data, status, e)
+		{
+			alert(e);
+		}
+	})
+	return false;
+}  
+</script>
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div>
+			<div class="col-lg-7">
+				<div class="page-header">
+					<h1>ISBN:{{book.ISBN}}</h1>
+				</div>
+			</div>
+		</div>
 		
-		return false;
 
-	}  
-
-	  </script>
-	  <title>{{book.ISBN}}</title>
-	</head>
-	<body class="container">
-		<div>
-			<div>ISBN</div>
-			<div>
-				<input id='ISBN' class="form-control" value='{{book.ISBN}}'>
+		<div class="col-lg-6">
+			<div class="well bs-component">
+			<form class="form-horizontal">
+				<fieldset>
+					<legend>Book Information</legend>
+					<div class="form-group">
+						<label for="ISBN" class="col-lg-2 control-label">ISBN</label>
+						<div class="col-lg-10"><input id='ISBN' class="form-control" value='{{book.ISBN}}' ></div>	
+					</div>
+					<div class="form-group">
+						<label for="DisplayName" class="col-lg-2 control-label">Book</label>
+						<div class="col-lg-10"><input  id='DisplayName' class="form-control" value='{{book.DisplayName}}' ></div>
+					</div>
+					<div class="form-group">
+						<label for="Description" class="col-lg-2 control-label">Description</label>
+						<div class="col-lg-10"><textarea id='Description' rows='5'  class="form-control" >{{book.Description}}</textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="LinkToBuy" class="col-lg-2 control-label">LinkToBuy</label>
+						<div class="col-lg-10"><textarea id='LinkToBuy' rows='3'  class="form-control" >{{book.LinkToBuy | default("www.amazon.cn")}}</textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="Author" class="col-lg-2 control-label">Author</label>
+						<div class="col-lg-10"><input id='Author' class="form-control" value='{{book.Author}}'></div>
+					</div>
+					<div class="form-group">
+						<label for="Rank" class="col-lg-2 control-label">Rank</label>
+						<div class="col-lg-10"><input id='Rank' class="form-control" value='{{book.Rank | default("100")}}'></div>
+					</div>
+				</fieldset>
+			</div>	
+			</form>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Audio</h3>
+				</div>
+				<div class="panel-body">
+					<div>
+						 <span class="btn btn-success fileinput-button">
+							<i class="glyphicon glyphicon-plus"></i>
+							<span>Add files...</span>
+							<input id="Audio" type="file"  name="Audio" >
+						</span>
+						<button class="btn btn-primary" id="AudioUpload" onclick="return ajaxFileUpload('Audio');">
+							<i class="glyphicon glyphicon-upload"></i>
+                    					<span>Start upload</span>
+						</button>
+					</div>
+					<div id="AudioFiles">
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+  				<div class="panel-body">
+  					<a id='Save' class="col-lg-3  btn btn-info">Save</a>
+					<a id='Remove' class="col-lg-3 col-lg-offset-1 btn btn-danger">Remove</a>
+					<a href="{{path('books_index')}}" class="col-lg-4 col-lg-offset-1 btn btn-warning">Return</a>
+				</div>
 			</div>
 		</div>
 
-		<div>
-			<div>
-				<div>DisplayName</div>
-				<div><input  id='DisplayName' class="form-control" value='{{book.DisplayName}}'></div>
-			</div>
-			<div>
-				<div>Description:</div>
-				<div><textarea rows='5' class="form-control" id='Description'>{{book.Description}}</textarea></div>
-			</div>
-			<div>
-				<div>LinkToBuy</div>
-				<div><input id='LinkToBuy' class="form-control" value='{{book.LinkToBuy | default("www.amazon.cn")}}'></div>
-			</div>
-			<div>
-				<div><img id='Snapshotimg' src='{{book.Snapshot | default("/img/none.png")}}'></div>
-				<div><input id="Snapshot"  class="form-control" type="file"  name="Snapshot" class="input"></div>
-				<div><button class="button" id="SnapshotUpload" onclick="return ajaxFileUpload('Snapshot');">Upload</button></div>
-			</div>
-			<div>
-				<div>Author</div>
-				<div><input id='Author' class="form-control" value='{{book.Author}}'></div>
-			</div>
-			<div id="AudioFiles">
-			</div>
-			<div>
-				<input id="Audio" type="file"  name="Audio" class="input">
-				<button class="button" id="AudioUpload" onclick="return ajaxFileUpload('Audio');">Upload</button>
-			</div>
-			<div>
-				<div>Rank</div>
-				<div><input id='Rank' value='{{book.Rank | default("100")}}'></div>
+		<div class="col-lg-5 col-lg-offset-1">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Cover</h3>
+				</div>
+				<div class="panel-body">
+					<span class="btn btn-success fileinput-button">
+						<i class="glyphicon glyphicon-plus"></i>
+						<span>Add files...</span>
+					<input id="Snapshot"  type="file"  name="Snapshot">
+					</span>
+					<button class="btn btn-primary" id="SnapshotUpload" onclick="return ajaxFileUpload('Snapshot');">
+						<i class="glyphicon glyphicon-upload"></i>
+                    				<span>Start upload</span>
+					</button>
+					<div><img id='Snapshotimg' src='{{book.Snapshot | default("/img/none.png")}}' width='100%'></div>
+
+				</div>
 			</div>
 		</div>
-		<div>
-			<table>
-				<tbody>
-					<tr>
-						<td><a id='Save' class="btn btn-info">Save</a></td>
-						<td><a id='Remove' class="btn btn-info">Remove</a></td>
-						<td><a href="{{path('books_index')}}" class="btn btn-info">Return</a></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</body>
-</html>
+	</div>
+{%endblock%}
 

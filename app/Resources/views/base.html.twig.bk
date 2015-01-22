@@ -7,14 +7,14 @@
       		<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
       		<script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
       		<script type="text/javascript" src="/js/ajaxfileupload.js"></script>
-      		<link rel="stylesheet" type="text/css" href="/css/ajaxfileupload.css">
       		{% block stylesheets %}{% endblock %}
       		<!-- Latest compiled and minified CSS -->
 		<link href="/css/bootstrap.min.css" rel="stylesheet">
+		<!-- Optional theme -->
+		<link href="/css/bootstrap-theme.min.css" rel="stylesheet">
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="/js/bootstrap.min.js"></script>
-		{% block javascript %}
-		{% endblock %}  
+		{% block javascript %}{% endblock %}  
     </head>
     <body>
     	{% block body %}
