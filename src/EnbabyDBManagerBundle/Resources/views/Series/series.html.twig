@@ -111,7 +111,7 @@ function ajaxFileUpload()
 			</form>
 		</div>
 		<div>
-			<a href="" class="btn-btn-link">Link to Books</a>
+			<a href="" class="btn-btn-link">Add new books to this series...</a>
 			{% if books%}
 				<table class="table table-striped table-hover">
 					<thead>
@@ -124,7 +124,7 @@ function ajaxFileUpload()
 						{% for b in books%}
 							<tr>
 								<td>{{loop.index}}</td>
-								<td>{{b.displayName}}</td>
+								<td><a class="btn-link" href="{{path('books_info',{'isbn':b.isbn})}}">{{b.displayName}}</a></td>
 							</tr>
 						{% endfor %}
 					</tbody>
