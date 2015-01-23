@@ -14,6 +14,7 @@ class Links
 {
     /**
      * @ORM\Column(name="ISBN", type="string", length=13)
+     * @ORM\Id
      */
     protected $isbn;
 	

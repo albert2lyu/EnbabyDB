@@ -1,44 +1,35 @@
+{% extends '::base.html.twig' %}
+{% block title %}Index of Series{% endblock %} 
 
-<!DOCTYPE HTML>
-<html lang="en">
-	<head>
-	  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	  <title></title>
-	</head>
-	<body>
-		<a href="{{path('series_info',{'seriesId':'newseries'})}}">Create New Series</a>
-		<ul>
+{% block body %}
+<div class="container">
+	<div class="page-header">
+		
+	</div>
+	<div>
+		<a href="{{path('series_info',{'seriesId':'newseries'})}}" class="btn btn-link">Create New Series</a>
+	</div>
 		{% for s in series%}
-		<li>
-			<table border="1">
-				<tr>
-					<td>ID</td>
-					<td><a href="{{path('series_info',{'seriesId':s.Id})}}" >{{s.Id}}</a></td>
-				</tr>
-				<tr>
-					<td>DisplayName</td>
-					<td>{{s.DisplayName}}</td>
-				</tr>
-				<tr>
-					<td>Description</td>
-					<td>{{s.Description}}</td>
-				</tr>
-				<tr>
-					<td>LinkToBuy</td>
-					<td>{{s.LinkToBuy}}</td>
-				</tr>
-				<tr>
-					<td>Snapshot</td>
-					<td><img src="{{s.Snapshot}}" width="600" height="300"></td>
-				</tr>
-				<tr>
-					<td>Rank</td>
-					<td>{{s.Rank}}</td>				
-				</tr>
-			</table>
-		</li>
+		<div class="row well bs-component">
+			<div class="col-lg-6">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title"><a href="{{path('series_info',{'seriesId':s.Id})}}" class="btn-link">{{s.DisplayName}}</a></h3>
+					</div>
+					<div class="panel-body">
+						<span>{{s.Description}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 col-lg-offset-1">
+				<img src="{{s.snapshot}}" width="100%">
+			</div>
+		</div>
 		{%endfor%}
-	</ul>
-</body>
-</html>
+</div>
+
+{% endblock %}
+
+		
+
 

@@ -148,17 +148,14 @@ function ajaxFileUpload(loadtype)
 
 {% block body %}
 	<div class="container">
-		<div>
-			<div class="col-lg-7">
-				<div class="page-header">
-					<h1>ISBN:{{book.ISBN}}</h1>
-				</div>
-			</div>
+
+		<div class="page-header">
+			
 		</div>
 		
-
-		<div class="col-lg-6">
-			<div class="well bs-component">
+		
+	<div class="col-lg-6">
+		<div class="well bs-component">
 			<form class="form-horizontal">
 				<fieldset>
 					<legend>Book Information</legend>
@@ -186,37 +183,18 @@ function ajaxFileUpload(loadtype)
 						<label for="Rank" class="col-lg-2 control-label">Rank</label>
 						<div class="col-lg-10"><input id='Rank' class="form-control" value='{{book.Rank | default("100")}}'></div>
 					</div>
+					<div class="col-lg-10 col-lg-offset-2">
+						<a id='Save' class="col-lg-3  btn btn-info">Save</a>
+						<a id='Remove' class="col-lg-3 col-lg-offset-1 btn btn-danger">Remove</a>
+						<a href="{{path('books_index')}}" class="col-lg-4 col-lg-offset-1 btn btn-warning">Return</a>
+					</div>
 				</fieldset>
-			</div>	
 			</form>
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3 class="panel-title">Audio</h3>
-				</div>
-				<div class="panel-body">
-					<div>
-						 <span class="btn btn-success fileinput-button">
-							<i class="glyphicon glyphicon-plus"></i>
-							<span>Add files...</span>
-							<input id="Audio" type="file"  name="Audio" >
-						</span>
-						<button class="btn btn-primary" id="AudioUpload" onclick="return ajaxFileUpload('Audio');">
-							<i class="glyphicon glyphicon-upload"></i>
-                    					<span>Start upload</span>
-						</button>
-					</div>
-					<div id="AudioFiles">
-					</div>
-				</div>
-			</div>
-			<div class="panel panel-default">
-  				<div class="panel-body">
-  					<a id='Save' class="col-lg-3  btn btn-info">Save</a>
-					<a id='Remove' class="col-lg-3 col-lg-offset-1 btn btn-danger">Remove</a>
-					<a href="{{path('books_index')}}" class="col-lg-4 col-lg-offset-1 btn btn-warning">Return</a>
-				</div>
-			</div>
 		</div>
+		<div>
+			<a href="" class="btn-btn-link">Link to Series</a>
+		</div>
+	</div>
 
 		<div class="col-lg-5 col-lg-offset-1">
 			<div class="panel panel-primary">
@@ -229,12 +207,32 @@ function ajaxFileUpload(loadtype)
 						<span>Add files...</span>
 					<input id="Snapshot"  type="file"  name="Snapshot">
 					</span>
-					<button class="btn btn-primary" id="SnapshotUpload" onclick="return ajaxFileUpload('Snapshot');">
+					<button class="btn btn-info" id="SnapshotUpload" onclick="return ajaxFileUpload('Snapshot');">
 						<i class="glyphicon glyphicon-upload"></i>
-                    				<span>Start upload</span>
+            <span>Start upload</span>
 					</button>
 					<div><img id='Snapshotimg' src='{{book.Snapshot | default("/img/none.png")}}' width='100%'></div>
 
+				</div>
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Audio</h3>
+				</div>
+				<div class="panel-body">
+					<div>
+						 <span class="btn btn-success fileinput-button">
+							<i class="glyphicon glyphicon-plus"></i>
+							<span>Add files...</span>
+							<input id="Audio" type="file"  name="Audio" >
+						</span>
+						<button class="btn btn-info" id="AudioUpload" onclick="return ajaxFileUpload('Audio');">
+							<i class="glyphicon glyphicon-upload"></i>
+							<span>Start upload</span>
+						</button>
+					</div>
+					<div id="AudioFiles">
+					</div>
 				</div>
 			</div>
 		</div>

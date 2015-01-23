@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use EnbabyDBManagerBundle\Entity\Series;
 use EnbabyDBManagerBundle\Entity\Books;
+use EnbabyDBManagerBundle\Service\LinksDb;
 
 DEFINE("WEBROOT","/var/www/EnbabyDB/web");
 DEFINE("SnapshotDB","/AudioLib/snapshots/");
@@ -25,15 +26,19 @@ class SeriesController extends Controller
     {
 	$em = $this->getDoctrine()->getManager();
 	$series = $em->getRepository('EnbabyDBManagerBundle:Series')->findOneById($seriesId);
+	$books = array();
 
 	if(!$series) 
 	{
 		$series = new Series();
 		$series->setId($this->getNextSeriesId());
+	}else{
+		$lc = $this->get('EnbabyDBManagerBundle.Services.LinksDB');
+		$books = $lc->getBooksInSeries($seriesId);
 	}
 
 
-	return $this->render('EnbabyDBManagerBundle:Series:series.html.twig',array('series'=>$series));
+	return $this->render('EnbabyDBManagerBundle:Series:series.html.twig',array('series'=>$series,'books'=>$books));
     }
 
     public function removeAction(Request $request)

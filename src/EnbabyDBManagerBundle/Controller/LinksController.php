@@ -8,197 +8,53 @@ use Symfony\Component\HttpFoundation\Response;
 use EnbabyDBManagerBundle\Entity\Series;
 use EnbabyDBManagerBundle\Entity\Books;
 
-DEFINE("WEBROOT","/var/www/EnbabyDB/web");
-DEFINE("SnapshotDB","/AudioLib/snapshots/");
 
 
-class ManagerController extends Controller
+class LinksController extends Controller
 {
-    public function bookindexAction()
+    public function getBooksInSeries($seriesId)
     {
 	$em = $this->getDoctrine()->getManager();
-	$query = $em->createQuery('SELECT book.isbn FROM EnbabyDBManagerBundle:Books book');
-	$bookindex = $query->getResult();
-	
-	return $this->render('EnbabyDBManagerBundle:Manager:bookindex.html.twig',array('bookindex' => $bookindex));	
-
+	$query = $em->createQuery('SELECT book.isbn,book.displayName FROM EnbabyDBManagerBundle:Books book,EnbabyDBManagerBundle:Links link WHERE link.series = :seriesid AND book.isbn = link.isbn')->setParameter('seriesid', $seriesId);
+	$books = $query->getResult();
+	return $books;
     }
 
-    public function bookAction($isbn)
-    {
-	$book = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Books')->find($isbn);
-
-	if(!$book)
-	{
-		$book = new Books();
-	}
-	return $this->render('EnbabyDBManagerBundle:Manager:book.html.twig',array('book' => $book));
-    }
-
-    public function bookupdateAction(Request $request)
-    {
-
-
-        $isbn = $request->request->get('ISBN','NULL');
-        if($isbn == 'NULL')
-        {
-                $response = new Response(json_encode(array('MSG' => '-1')));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-        }
-        $em = $this->getDoctrine()->getManager();
-        $book = $em->getRepository('EnbabyDBManagerBundle:Books')->find($isbn);
-        $new = null;
-        if(!$book)
-        {
-                $book = new Books();
-                $new = 1;
-        }
-        $book->setISBN($isbn);
-        $book->setDisplayName($request->request->get('DisplayName'));
-        $book->setDescription($request->request->get('Description'));
-        $book->setLinkToBuy($request->request->get('LinkToBuy'));
-        $book->setSnapshot($request->request->get('Snapshot'));
-	$book->setAuthor($request->request->get('Author'));
-	$book->setAudioFiles($request->request->get('AudioFiles'));
-        $book->setRank($request->request->get('Rank'));
-
-        if($new) $em->persist($book);
-        $em->flush();
-
-        $response = new Response(json_encode(array('MSG' => '1')));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-
-    }
-
-
-
-
-    public function seriesindexAction()
-    {
-	$series = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findAll();
-		
-        return $this->render('EnbabyDBManagerBundle:Manager:index.html.twig', array('series' => $series));
-    }
-
-    public function seriesAction($seriesId)
+    public function removeBookFromSeries($isbn,$seriesId)
     {
 	$em = $this->getDoctrine()->getManager();
-	$series = $em->getRepository('EnbabyDBManagerBundle:Series')->findOneById($seriesId);
-
-	if(!$series) 
+	$link = $em->getRepository('EnbabyDBManagerBundle:Links')->findOneBy(array('isbn'=>$isbn,'series'=>$seriesId));
+	if($link)
 	{
-		$series = new Series();
-		$series->setId($this->getNextSeriesId());
-	}
-
-
-	return $this->render('EnbabyDBManagerBundle:Manager:series.html.twig',array('series'=>$series));
-    }
-
-    public function seriesremoveAction(Request $request)
-    {
-	$seriesId = $request->request->get('Id','NULL');
-	if($seriesId =='NULL')
-	{
-		$response = new Response(json_encode(array('MSG' => '-1')));
+		$em->delete($link);
+		return 1;
 	}else{
-		$em = $this->getDoctrine()->getManager();
-        	$series = $em->getRepository('EnbabyDBManagerBundle:Series')->find($seriesId);
-
-		if(!$series)
-		{
-			$response = new Response(json_encode(array('MSG' => '-1')));	
-		}else{
-			$em->remove($series);
-			$em->flush();
-			$response = new Response(json_encode(array('MSG' => '1')));
-		}
-		$response->headers->set('Content-Type', 'application/json');
+		return 0;
 	}
-	return $response;
-	
-}
-	
-	
+    }
 
-    public function seriesupdateAction(Request $request)
+    public function addBookToSeries($isbn,$seriesId)
     {
-
-
-	$seriesId = $request->request->get('Id','NULL');
-	if($seriesId == 'NULL')
-	{
-		$response = new Response(json_encode(array('MSG' => '-1')));
-		$response->headers->set('Content-Type', 'application/json');
-		return $response;
-	}
 	$em = $this->getDoctrine()->getManager();
-	$series = $em->getRepository('EnbabyDBManagerBundle:Series')->find($seriesId);
-	$new = null;
-	if(!$series)
+        $link = $em->getRepository('EnbabyDBManagerBundle:Links')->findOneBy(array('isbn'=>$isbn,'series'=>$seriesId));
+	if(!$link)
 	{
-		$series = new Series();
-		$new = 1;
-	}
-        $series->setId($seriesId);
-	$series->setDisplayName($request->request->get('DisplayName'));
-	$series->setDescription($request->request->get('Description'));
-	$series->setLinkToBuy($request->request->get('LinkToBuy'));
-	$series->setSnapshot($request->request->get('Snapshot'));
-	$series->setRank($request->request->get('Rank'));
-
-	if($new) $em->persist($series);
-	$em->flush();
-	
-	$response = new Response(json_encode(array('MSG' => '1')));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-	
+		$link = new Links();
+		$link->setSeries($seriesId);
+		$link->setIsbn($isbn);
+		$em->persist($link);
+		$em->flush();
+	}	
+        return 1;
     }
-	
-    public function seriesuploadAction(Request $request)
+
+    public function getSeriesOfABook($isbn)
     {
-	$fileElementName = 'fileToUpload';
-	$uploadFile = $request->files->get($fileElementName);
-	if($uploadFile->isValid())
-	{
-		$timeStamp = md5(time() . $uploadFile->getClientOriginalName());
-		$localFileName = $timeStamp . '.' . $uploadFile->guessExtension();
-		$file = $uploadFile->move(WEBROOT . SnapshotDB , $localFileName );
-		$response = new Response(json_encode(array('MSG' => '1', 'Location' =>  SnapshotDB . $localFileName)));
-
-	}else{
-		$response = new Response(json_encode(array('MSG'=> '-1')));
-	}
-	return $response;
+	$em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery('SELECT series.id FROM EnbabyDBManagerBundle:Series series,EnbabyDBManagerBundle:Links link WHERE link.isbn = :isbn AND series.id = link.series')->setParameter('isbn', $isbn);
+        $series = $query->getResult();
+        return $series;
     }
 
 
-
-
-    public function getNextSeriesId()
-    {
-	$nowtime = time();
-	$year = ($nowtime / 31556926 + 1970) % 2000 ;
-	for($i = 1; $i <100; $i++)
-	{
-		if($i<10)
-		{
-			$returnId = 'Z' . $year . '0' . $i;
-		}else{
-			$returnId = 'Z' . $year . $i;
-		}
-		$em = $this->getDoctrine()->getManager();
-                $series = $em->getRepository('EnbabyDBManagerBundle:Series')->findOneById($returnId);
-		if(!$series)
-		{
-			return $returnId;
-		}
-		
-	}
-	
-	return 'FULL';
-    }
 }
