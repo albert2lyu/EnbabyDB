@@ -42,3 +42,10 @@ books_snapshotupload:
     path:     /book/snapshotupload
     defaults: { _controller: EnbabyDBManagerBundle:Books:snapshotupload }
 
+links_link:
+    path:	  /links/link
+    defaults: { _controller: EnbabyDBManagerBundle:Links:link }
+
+links_unlink:
+    path:	 /links/unlink
+    defaults: { _controller: EnbabyDBManagerBundle:Links:unlink }

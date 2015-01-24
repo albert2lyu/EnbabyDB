@@ -31,8 +31,14 @@ class BooksController extends Controller
 	if(!$book)
 	{
 		$book = new Books();
+		$unlink = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findAll();
+		$link = array();
+	}else{
+		$lc = $this->get('EnbabyDBManagerBundle.Services.LinksDB');
+		$link = $lc->getSeriesLinkToBook($isbn);
+		$unlink = $lc->getSeriesNotLinkToBook($isbn); 
 	}
-	return $this->render('EnbabyDBManagerBundle:Books:book.html.twig',array('book' => $book));
+	return $this->render('EnbabyDBManagerBundle:Books:book.html.twig',array('book' => $book,'link' => $link,'unlink' => $unlink));
     }
 
     public function updateAction(Request $request)

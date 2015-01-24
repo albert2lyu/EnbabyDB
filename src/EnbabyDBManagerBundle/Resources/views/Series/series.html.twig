@@ -82,9 +82,15 @@ function ajaxFileUpload()
 
 	<div class="col-lg-6">
 		<div class="well bs-component">
+
 			<form class="form-horizontal">
 				<fieldset>
-					<legend>Series Information</legend>
+					<div class="row">
+						<legend class=col-lg-5>Series Information</legend>
+						<span class=" col-lg-2 col-lg-offset-4 label label-info right" id="Id">{{series.Id}}</span>
+					</div>
+					
+
 					<div class="form-group">
 						<label for="DisplayName" class="col-lg-2 control-label">Series</label>
 						<div class="col-lg-10"><input id='DisplayName' class="form-control" value='{{series.DisplayName}}' ></div>	
@@ -106,16 +112,17 @@ function ajaxFileUpload()
 						<a id='Remove' class="col-lg-3 col-lg-offset-1 btn btn-danger">Remove</a>
 						<a href="{{path('series_index')}}" class="col-lg-4 col-lg-offset-1 btn btn-warning">Return</a>
 					</div>
-					<span class="label label-info" id="Id">{{series.Id}}</span>
+
 				</fieldset>
 			</form>
 		</div>
 		<div>
 			<a href="" class="btn-btn-link">Add new books to this series...</a>
+			<label class="divider"></label>
 			{% if books%}
 				<table class="table table-striped table-hover">
 					<thead>
-						<tr>
+						<tr class="info">
 							<th>#</th>
 							<th>Book</th>
 						</tr>

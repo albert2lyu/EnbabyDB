@@ -12,25 +12,68 @@ use EnbabyDBManagerBundle\Entity\Books;
 
 class LinksController extends Controller
 {
-    public function unlinkAction($seriesId)
+    public function unlinkAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $series = $em->getRepository('EnbabyDBManagerBundle:Series')->findOneById($seriesId);
-        $books = array();
 
-        if(!$series)
+		$isbn = $request->query->get('ISBN','NULL');
+        $seriesId = $request->query->get('Id','NULL');
+
+        if($isbn == 'NULL' || $seriesId == 'NULL')
         {
-                $series = new Series();
-                $series->setId($this->getNextSeriesId());
-        }else{
-                $lc = $this->get('EnbabyDBManagerBundle.Services.LinksDB');
-                $books = $lc->getBooksInSeries($seriesId);
+            $response = new Response(json_encode(array('MSG' => '-1')));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
         }
 
 
-        return $this->render('EnbabyDBManagerBundle:Series:series.html.twig',array('series'=>$series,'books'=>$books));
+        $em = $this->getDoctrine()->getManager();
+        $series = $em->getRepository('EnbabyDBManagerBundle:Series')->findOneById($seriesId);
+        $book = $em->getRepository('EnbabyDBManagerBundle:Books')->findOneByIsbn($isbn);
+
+        if(!$series || !$book)
+        {
+				$response = new Response(json_encode(array('MSG' => '-1')));
+        }else{
+                $lc = $this->get('EnbabyDBManagerBundle.Services.LinksDB');
+                $books = $lc->unlinkBookFromSeries($isbn,$seriesId);
+				$response = new Response(json_encode(array('MSG' => '1')));
+        }
+
+
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
     }
 
+	public function linkAction(Request $request)
+	{
+		$isbn = $request->request->get('ISBN','NULL');
+		$seriesId = $request->request->get('Id','NULL');
+
+		if($isbn == 'NULL' || $seriesId == 'NULL')
+		{
+			$response = new Response(json_encode(array('MSG' => '-1')));
+			$response->headers->set('Content-Type', 'application/json');
+			return $response;
+		}
+
+		$em = $this->getDoctrine()->getManager();
+        $series = $em->getRepository('EnbabyDBManagerBundle:Series')->findOneById($seriesId);
+        $book = $em->getRepository('EnbabyDBManagerBundle:Books')->findOneByIsbn($isbn);
+
+        if(!$series || !$book)
+        {
+                $response = new Response(json_encode(array('MSG' => '-1','Detail' => 'Can not find ' . $series .' or ' . $book)));
+        }else{
+                $lc = $this->get('EnbabyDBManagerBundle.Services.LinksDB');
+                $books = $lc->linkBookToSeries($isbn,$seriesId);
+                $response = new Response(json_encode(array('MSG' => '1')));
+        }
+
+
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+	
 
 
 }

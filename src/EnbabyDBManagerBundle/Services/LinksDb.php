@@ -5,6 +5,7 @@ namespace EnbabyDBManagerBundle\Services;
 use Doctrine\ORM\EntityManager;
 use EnbabyDBManagerBundle\Entity\Series;
 use EnbabyDBManagerBundle\Entity\Books;
+use EnbabyDBManagerBundle\Entity\Links;
 
 
 
@@ -24,19 +25,20 @@ class LinksDb
 	return $books;
     }
 
-    public function removeBookFromSeries($isbn,$seriesId)
+    public function unlinkBookFromSeries($isbn,$seriesId)
     {
 	$link = $this->em->getRepository('EnbabyDBManagerBundle:Links')->findOneBy(array('isbn'=>$isbn,'series'=>$seriesId));
 	if($link)
 	{
-		$this->em->delete($link);
+		$query = $this->em->createQuery('DELETE FROM EnbabyDBManagerBundle:Links link WHERE link.series = :seriesid AND link.isbn = :isbn')->setParameters(array('seriesid' => $seriesId,'isbn' => $isbn));
+    	$books = $query->execute();
 		return 1;
 	}else{
 		return 0;
 	}
     }
 
-    public function addBookToSeries($isbn,$seriesId)
+    public function linkBookToSeries($isbn,$seriesId)
     {
         $link = $this->em->getRepository('EnbabyDBManagerBundle:Links')->findOneBy(array('isbn'=>$isbn,'series'=>$seriesId));
 	if(!$link)
@@ -50,12 +52,17 @@ class LinksDb
         return 1;
     }
 
-    public function getSeriesOfABook($isbn)
+    public function getSeriesLinkToBook($isbn)
     {
-        $query = $this->em->createQuery('SELECT series.id FROM EnbabyDBManagerBundle:Series series,EnbabyDBManagerBundle:Links link WHERE link.isbn = :isbn AND series.id = link.series')->setParameter('isbn', $isbn);
+        $query = $this->em->createQuery('SELECT series.id,series.displayName FROM EnbabyDBManagerBundle:Series series,EnbabyDBManagerBundle:Links link WHERE link.isbn = :isbn AND series.id = link.series')->setParameter('isbn', $isbn);
         $series = $query->getResult();
         return $series;
     }
 
-
+	public function getSeriesNotLinkToBook($isbn)
+	{
+		$query = $this->em->createQuery('SELECT series.id,series.displayName FROM EnbabyDBManagerBundle:Series series WHERE series.id NOT IN (SELECT link.series FROM EnbabyDBManagerBundle:Links link WHERE link.isbn = :isbn)')->setParameter('isbn', $isbn);
+		$series = $query->getResult();
+		return $series;
+	}
 }
