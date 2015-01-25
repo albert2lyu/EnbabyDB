@@ -19,14 +19,14 @@
 		
 		<table class="table table-striped table-hover">
 			<thead>
-				<tr>
+				<tr class="info">
 					<th>ISBN</th>
 					<th>Book</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for s in index%}
-				<tr class="info">
+				<tr >
 					<td><a href="{{path('books_info',{'isbn':s.isbn})}}" class='btn-link'>{{s.isbn}}</a></td>
 					<td>{{s.displayName}}</td>
 				</tr>
