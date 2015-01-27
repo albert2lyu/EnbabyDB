@@ -5,10 +5,11 @@
 {% endblock %}
 
 {% block javascript %}
+<script type="text/javascript"> document.audioFiles = "{{book.audioFiles}}";</script>
 {% endblock %}
 
 {% block mobilePagejavascript %}
-	<script src="/js/PlayAudio.js"></script>
+<script src="/js/PlayAudio.js"></script>
 {% endblock %}
 
 {% block header %}
@@ -23,19 +24,11 @@
 <p> <small>作者: </small><em>{{ book.Author }}</em></p>
 <p>{{ book.Description }}</p>
 
-{{book.audioFiles}}
-
-
 <div>
 	<a id="playbookaudio" data-role="button">《{{ book.DisplayName }}》全文阅读</a>
 	<audio id="bookaudio">
-      	{% for audio in book.audioFiles %}
-        	<source src="{{libLoc}}{{audio.File}}" type="{{audio.Type}}">
-        	{% endfor %}
-        	Your browser does not support the audio.
-   </audio>
+	</audio>
 </div>
-
 {% endblock %}
 
 {% block footer %}
@@ -45,5 +38,5 @@
 
 
 {% block footerjavascript%}
-			
+
 {% endblock %}
