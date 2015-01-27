@@ -1,7 +1,7 @@
 # This file is auto-generated during the composer install
 parameters:
     database_driver: pdo_mysql
-    database_host: 127.0.0.1 
+    database_host: 115.29.101.102
     database_port: null
     database_name: AudioLib
     database_user: changye

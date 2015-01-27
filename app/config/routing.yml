@@ -1,3 +1,7 @@
+enbaby_db_audio_lib:
+    resource: "@EnbabyDBAudioLibBundle/Resources/config/routing.yml"
+    prefix:   /audiolib
+
 enbaby_db_manager:
     resource: "@EnbabyDBManagerBundle/Resources/config/routing.yml"
     prefix:   /manager

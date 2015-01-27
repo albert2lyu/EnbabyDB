@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+		<meta name="application-name" content="EnBaby"/>
+      <title>{% block title %}Welcome!{% endblock %}</title> 
+      <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+      <script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+		{% block javascript %}{% endblock %}  
+		<script src="/js/jquery.mobile-1.4.2.min.js"></script>
+		<link rel="stylesheet" href="/js/jquery.mobile-1.4.2.min.css">
+		{% block stylesheets %}{% endblock %}
+		
+    </head>
+    <body>
+		<div data-role="page"  id="mobilePage">
+			{% block mobilePagejavascript %}{% endblock %} 
+			
+			<div data-role="header" data-theme="b">
+				{% block header %}{% endblock %}
+			</div>
+			<div data-role="content">
+				{% block content %}{% endblock %}
+			</div>
+
+			<div data-role="footer" data-theme="b">
+				{% block footer %}{% endblock %}
+			</div>
+		</div> 
+		
+		<div data-role="page" id="declarePage" >
+			<div data-role="header" data-theme="b">
+				<h1>申明</h1>
+			</div>
+			<div data-role="content">
+				<p>本站所使用音频均来源于网络搜索及网友上传,仅供学习外语之用，禁止用作任何商业盈利行为</p>
+				<p>本站音频仅为配合外语教学使用，为配合阅读，请您购买正版书籍。</p>
+				<p>如您认为本站页面信息侵犯了您的权益，请附上版权证明邮件告知，在收到邮件后24小时内删除</p>
+				<p>我们的邮箱:service@enbaby.net</p>
+			</div>
+
+			<div data-role="footer">
+				
+			</div>
+		</div>  		
+		{% block footerjavascript %}{% endblock %}  
+		<script src="http://s11.cnzz.com/z_stat.php?id=1000502422&web_id=1000502422" language="JavaScript"></script>
+    </body>
+</html>

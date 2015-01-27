@@ -1,0 +1,15 @@
+audiolib_series_index:
+    pattern: /series
+    defaults: { _controller: EnbabyDBAudioLibBundle:Series:index }
+
+audiolib_series_info:
+    pattern: /series/{seriesId}
+    defaults: { _controller: EnbabyDBAudioLibBundle:Series:series}
+
+audiolib_books_index:
+    pattern: /books
+    defaults: { _controller: EnbabyDBAudioLibBundle:Books:index }
+
+audiolib_books_info:
+    pattern: /book/{isbn}
+    defaults: { _controller: EnbabyDBAudioLibBundle:Books:book}

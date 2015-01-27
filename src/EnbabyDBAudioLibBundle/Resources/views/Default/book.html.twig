@@ -1,0 +1,49 @@
+{% extends '::mobile.html.twig' %}
+
+{% block title %}
+{{ book.DisplayName }}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block mobilePagejavascript %}
+	<script src="/js/PlayAudio.js"></script>
+{% endblock %}
+
+{% block header %}
+<a data-rel="back" class="ui-icon-arrow-l ui-btn ui-shadow ui-nodisc-icon  ui-btn-inline ui-btn-icon-left"  data-transition="slide" data-direction="reverse">专辑</a>
+<h1>{{ book.DisplayName }}</h1>
+<a href="#declarePage" class="ui-icon-info ui-btn ui-shadow ui-nodisc-icon  ui-btn-inline ui-btn-b ui-btn-icon-notext  " data-rel="dialog" data-iconshadow="false" data-transition="flip" data-iconpos="notext">申明</a>
+{% endblock %}
+
+{% block content %}
+<img style="width:100%;"src="{{book.Snapshot}}" alt="Snapshot" >
+<p><strong>{{ book.DisplayName }}</strong></p>
+<p> <small>作者: </small><em>{{ book.Author }}</em></p>
+<p>{{ book.Description }}</p>
+
+{{book.audioFiles}}
+
+
+<div>
+	<a id="playbookaudio" data-role="button">《{{ book.DisplayName }}》全文阅读</a>
+	<audio id="bookaudio">
+      	{% for audio in book.audioFiles %}
+        	<source src="{{libLoc}}{{audio.File}}" type="{{audio.Type}}">
+        	{% endfor %}
+        	Your browser does not support the audio.
+   </audio>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<h1>{{book.DisplayName}}</h1>
+{% endblock %}
+
+
+
+{% block footerjavascript%}
+			
+{% endblock %}
