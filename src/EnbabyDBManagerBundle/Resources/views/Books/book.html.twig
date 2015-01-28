@@ -3,122 +3,80 @@
 {% block title %}{{book.ISBN}}{%endblock%}
 
 {%block javascript %}
+<script  src="/js/manager.js"> </script>
 <script type="text/javascript" >  
-function joinAudioFiles()
-{
-	var audios = $("#AudioFiles").find("audio");
-	var source = new Array();
-	for(var i=0;i<audios.length;i++)
-	{
-		if(audios[i].getAttribute('data-valid') == 'true')
-		{
-			source[i] = audios[i].getAttribute('data-src');
-		}  		
-	}
-	return source.join(';');
-}
-
-function expandAudioFiles(sources)
-{
-	var source = sources.split(';');
-	for (var i = 0; i < source.length; i++) 
-	{
-		addAudio(source[i]);
-	}
-}
-
-function addAudio(source)
-{
-	if(source!=''){
-		var container = $("<div style='position:relative'></div>");
-		var removeBtn = $("<button type='button' class='remove-audio-btn btn-xs btn-primary' style='position:absolute;top:0;right:0'><span class='glyphicon glyphicon-trash'></span></button>");
-		var audio = $("<audio data-valid='true' controls='controls'></audio>");
-		audio.attr('src',source);
-		audio.attr('data-src',source);
-		container.append(audio);
-		container.append(removeBtn);
-		$("#AudioFiles").append(container);
-	}
-}
-
 $(document).ready(function() {
 	expandAudioFiles("{{book.AudioFiles}}");
 	$(document).on('click','.remove-audio-btn',function  () {
-	  	var audio = $(this).siblings("audio");
-	  	if(audio.attr('data-valid')=='true') {
-	  		audio.attr('data-valid','false');
-	  		$(this).removeClass('btn-primary')
-	  		$(this).addClass('btn-danger');
-	  	}else{
-	  		audio.attr('data-valid','true');
-	  		$(this).removeClass('btn-danger');
-	  		$(this).addClass('btn-primary');
-	  	}
-	  });
-
-
-$("#Save").click(function() {
-	$.post('{{path("books_update")}}', 
-	{
-		ISBN : $("#ISBN").val(),
-		DisplayName : $("#DisplayName").val(),
-		Description : $("#Description").val(),
-		LinkToBuy : $("#LinkToBuy").val(),
-		Snapshot : $("#Snapshotimg").attr('src'),
-		Author : $("#Author").val(),
-		AudioFiles: joinAudioFiles(),
-		Rank : $("#Rank").val()
-	}, 
-	function(data, textStatus, xhr) {
-	  	alert(textStatus);
-	});
-});		
-
-$("#Remove").click(function() {
-	$.post('{{path("books_remove")}}', 
-	{
-		ISBN : $("#ISBN").val()
-	}, function(data, textStatus, xhr) {
-		if(data.MSG =='1')
-		{
-			alert("Remove successfully!");
+		var audio = $(this).siblings("audio");
+		if(audio.attr('data-valid')=='true') {
+			audio.attr('data-valid','false');
+			$(this).removeClass('btn-primary')
+			$(this).addClass('btn-danger');
 		}else{
-			alert("Remove failed!");
+			removeBookAudio(audio.attr('data-src'),$(this).parent())
 		}
 	});
-});	
+	$("#Save").click(function() {
+		$.post('{{path("books_update")}}', 
+		{
+			ISBN : $("#ISBN").val(),
+			DisplayName : $("#DisplayName").val(),
+			Description : $("#Description").val(),
+			LinkToBuy : $("#LinkToBuy").val(),
+			Author : $("#Author").val(),
+			Rank : $("#Rank").val()
+		}, 
+		function(data, textStatus, xhr) {
+			alert(textStatus);
+		});
+	});		
 
-$("#Link").click(function() {
-	var linkSeries = $("#select").val();
-	$.post('{{path("links_link")}}', 
+	$("#Remove").click(function() {
+		$.post('{{path("books_remove")}}', 
+		{
+			ISBN : $("#ISBN").val()
+		}, function(data, textStatus, xhr) {
+			if(data.MSG =='1')
+			{
+				alert("Remove successfully!");
+			}else{
+				alert("Remove failed!");
+			}
+		});
+	});	
+
+	$("#Link").click(function() {
+		var linkSeries = $("#select").val();
+		$.post('{{path("links_link")}}', 
 		{
 			ISBN: $("#ISBN").val(),
 			Id: $("#select").val(),
 		}, function(data, textStatus, xhr) {
 			if(data.MSG == '1')
 			{
-				var newlinkSeries = $('<tr class="default"><td class="displayName"><a href="/app_dev.php/manager/series/id/' + linkSeries + '">' + $("#" + linkSeries).html() + '</a></td><td><a class="btn-link">unlink</a></td></tr>');
+				var newlinkSeries = $('<tr class="default"><td class="displayName"><a href="/manager/series/id/' + linkSeries + '">' + $("#" + linkSeries).html() + '</a></td><td><a class="btn-link">unlink</a></td></tr>');
 				$("#table").find("tbody").append(newlinkSeries);
 				$("#" + linkSeries).remove();
 			}else{
 				alert("Link not success!");
 			}
-		/*optional stuff to do after success */
+			/*optional stuff to do after success */
+		});
 	});
-});
 
 	$(document).on('click','.unlink',function  () {
 		var unlinkbtn = $(this);
-	  	var seriesId = $(this).attr('data-id');
-	  	var isbn = $("#ISBN").val();
-	  	$.get('{{path("links_unlink")}}',
-	  		{
-	  			ISBN: isbn,
-	  			Id:seriesId,
-	  		}, function(data, textStatus, xhr) {
-	  		/*optional stuff to do after success */
+		var seriesId = $(this).attr('data-id');
+		var isbn = $("#ISBN").val();
+		$.get('{{path("links_unlink")}}',
+		{
+			ISBN: isbn,
+			Id:seriesId,
+		}, function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
 
-	  		if(data.MSG == '1')
+			if(data.MSG == '1')
 			{
 				var newOption = $("<option></option>");
 				newOption.text(unlinkbtn.parent().siblings(".displayName").find("a").html());
@@ -130,65 +88,9 @@ $("#Link").click(function() {
 				alert("Unlink not success!");
 			}
 
-	  	});
-	  });
-
-
-});
-
-function ajaxFileUpload(loadtype)
-{
-	//starting setting some animation when the ajax starts and completes
-	$("#loading")
-	.ajaxStart(function(){
-		$(this).show();
-	})
-	.ajaxComplete(function(){
-		$(this).hide();
+		});
 	});
-	var uploadUrl;
-	if(loadtype == 'Audio') 
-	{
-		uploadUrl = "{{path('books_audioupload')}}";
-	}
-	if(loadtype == 'Snapshot') 
-	{
-		uploadUrl = "{{path('books_snapshotupload')}}";
-	}
-	$.ajaxFileUpload
-	({
-		url: uploadUrl, 
-		secureuri:false,
-		fileElementId:loadtype,
-		dataType: 'json',
-		success: function (data, status)
-		{
-			if(typeof(data.MSG) != 'undefined')
-			{
-				if(data.MSG == '1')
-				{
-					alert(data.Location);
-					if(loadtype == 'Snapshot')
-					{
-						$("#Snapshotimg").attr('src',data.Location);
-					}
-					if(loadtype == 'Audio')
-					{
-						addAudio(data.Location);
-					}
-				}else
-				{
-					alert("Upload failed!");
-				}
-			}
-		},
-		error: function (data, status, e)
-		{
-			alert(e);
-		}
-	})
-	return false;
-}  
+});
 </script>
 {% endblock %}
 
@@ -290,7 +192,7 @@ function ajaxFileUpload(loadtype)
 						<span>Add files...</span>
 					<input id="Snapshot"  type="file"  name="Snapshot">
 					</span>
-					<button class="btn btn-info" id="SnapshotUpload" onclick="return ajaxFileUpload('Snapshot');">
+					<button class="btn btn-info" id="SnapshotUpload" onclick="return ajaxFileUpload('Snapshot',refreshBookSnapshot);">
 						<i class="glyphicon glyphicon-upload"></i>
             <span>Start upload</span>
 					</button>
@@ -313,12 +215,13 @@ function ajaxFileUpload(loadtype)
 							<span>Add files...</span>
 							<input id="Audio" type="file"  name="Audio" >
 						</span>
-						<button class="btn btn-info" id="AudioUpload" onclick="return ajaxFileUpload('Audio');">
+						<button class="btn btn-info" id="AudioUpload" onclick="return ajaxFileUpload('Audio',uploadBookAudio);">
 							<i class="glyphicon glyphicon-upload"></i>
 							<span>Start upload</span>
 						</button>
 					</div>
 					<div id="AudioFiles">
+						<label class="divider"></label>
 					</div>
 				</div>
 			</div>

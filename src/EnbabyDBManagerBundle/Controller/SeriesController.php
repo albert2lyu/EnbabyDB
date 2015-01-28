@@ -11,6 +11,7 @@ use EnbabyDBManagerBundle\Service\LinksDb;
 
 DEFINE("WEBROOT","/var/www/EnbabyDB/web");
 DEFINE("SnapshotDB","/AudioLib/snapshots/");
+DEFINE("Uploads","/AudioLib/uploads/");
 
 
 class SeriesController extends Controller
@@ -104,19 +105,25 @@ class SeriesController extends Controller
 	
     public function snapshotuploadAction(Request $request)
     {
-	$fileElementName = 'fileToUpload';
-	$uploadFile = $request->files->get($fileElementName);
-	if($uploadFile->isValid())
-	{
-		$timeStamp = md5(time() . $uploadFile->getClientOriginalName());
-		$localFileName = $timeStamp . '.' . $uploadFile->guessExtension();
-		$file = $uploadFile->move(WEBROOT . SnapshotDB , $localFileName );
-		$response = new Response(json_encode(array('MSG' => '1', 'Location' =>  SnapshotDB . $localFileName)));
 
-	}else{
-		$response = new Response(json_encode(array('MSG'=> '-1')));
-	}
-	return $response;
+    	$id = $request->request->get('Id');
+    	$file = $request->request->get('File');
+    	$em = $this->getDoctrine()->getManager();
+    	$series = $em->getRepository('EnbabyDBManagerBundle:Series')->findOneById($id);
+    	$uploadedFile = WEBROOT . Uploads . $file;
+    if($series && file_exists($uploadedFile))
+    {
+        $dest =SnapshotDB . $id . "_" . $file;
+        copy($uploadedFile, WEBROOT . $dest);
+        $series->setSnapshot($dest);
+        $em->flush();
+        $response = new Response(json_encode(array('MSG' => '1', 'Location' => $dest)));
+    }else{
+        $response = new Response(json_encode(array('MSG' => '-1')));
+    }
+
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
     }
 
 

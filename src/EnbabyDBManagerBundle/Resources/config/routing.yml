@@ -11,7 +11,7 @@ series_update:
     defaults: { _controller: EnbabyDBManagerBundle:Series:update }
 
 series_snapshotupload:
-    path:     /series/upload
+    path:     /series/snapshotupload
     defaults: { _controller: EnbabyDBManagerBundle:Series:snapshotupload }
 
 series_remove:
@@ -38,6 +38,10 @@ books_audioupload:
     path:     /book/audioupload
     defaults: { _controller: EnbabyDBManagerBundle:Books:audioupload}
 
+books_audioremove:
+    path:     /book/audioremove
+    defaults: { _controller: EnbabyDBManagerBundle:Books:audioremove}
+
 books_snapshotupload:
     path:     /book/snapshotupload
     defaults: { _controller: EnbabyDBManagerBundle:Books:snapshotupload }
@@ -49,3 +53,7 @@ links_link:
 links_unlink:
     path:	 /links/unlink
     defaults: { _controller: EnbabyDBManagerBundle:Links:unlink }
+
+file_upload:
+    path:    /upload
+    defaults: { _controller: EnbabyDBManagerBundle:Upload:upload}

@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block javascript %}
-<script type="text/javascript"> document.audioFiles = "{{book.audioFiles}}";</script>
 {% endblock %}
 
 {% block mobilePagejavascript %}
+<script type="text/javascript"> document.audioFiles = "{{book.audioFiles}}";</script>
 <script src="/js/PlayAudio.js"></script>
 {% endblock %}
 
@@ -25,7 +25,7 @@
 <p>{{ book.Description }}</p>
 
 <div>
-	<a id="playbookaudio" data-role="button">《{{ book.DisplayName }}》全文阅读</a>
+	<a id="playbookaudio" data-role="button">《{{ book.DisplayName }}》绘本试听</a>
 	<audio id="bookaudio">
 	</audio>
 </div>

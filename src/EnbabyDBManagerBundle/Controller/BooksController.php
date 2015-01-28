@@ -11,79 +11,78 @@ use EnbabyDBManagerBundle\Entity\Books;
 DEFINE("WEBROOT","/var/www/EnbabyDB/web");
 DEFINE("SnapshotDB","/AudioLib/snapshots/");
 DEFINE("AudioDB","/AudioLib/audios/");
-
+DEFINE("Uploads","/AudioLib/uploads/");
 
 class BooksController extends Controller
 {
     public function indexAction()
     {
-	$em = $this->getDoctrine()->getManager();
-	$query = $em->createQuery('SELECT book.isbn,book.displayName FROM EnbabyDBManagerBundle:Books book');
-	$index = $query->getResult();
-	
-	return $this->render('EnbabyDBManagerBundle:Books:index.html.twig',array('index' => $index));	
+       $em = $this->getDoctrine()->getManager();
+       $query = $em->createQuery('SELECT book.isbn,book.displayName FROM EnbabyDBManagerBundle:Books book');
+       $index = $query->getResult();
+
+       return $this->render('EnbabyDBManagerBundle:Books:index.html.twig',array('index' => $index));	
     }
 
-    public function bookAction($isbn)
-    {
-	$book = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Books')->find($isbn);
+   public function bookAction($isbn)
+   {
+       $book = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Books')->find($isbn);
 
-	if(!$book)
-	{
-		$book = new Books();
-		$unlink = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findAll();
-		$link = array();
-	}else{
-		$lc = $this->get('EnbabyDBManagerBundle.Services.LinksDB');
-		$link = $lc->getSeriesLinkToBook($isbn);
-		$unlink = $lc->getSeriesNotLinkToBook($isbn); 
-	}
-	return $this->render('EnbabyDBManagerBundle:Books:book.html.twig',array('book' => $book,'link' => $link,'unlink' => $unlink));
+       if(!$book)
+       {
+          $book = new Books();
+          $unlink = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findAll();
+          $link = array();
+      }else{
+          $lc = $this->get('EnbabyDBManagerBundle.Services.LinksDB');
+          $link = $lc->getSeriesLinkToBook($isbn);
+          $unlink = $lc->getSeriesNotLinkToBook($isbn); 
+      }
+      return $this->render('EnbabyDBManagerBundle:Books:book.html.twig',array('book' => $book,'link' => $link,'unlink' => $unlink));
     }
 
-    public function updateAction(Request $request)
+public function updateAction(Request $request)
+{
+
+
+    $isbn = $request->request->get('ISBN','NULL');
+    if($isbn == 'NULL')
     {
-
-
-        $isbn = $request->request->get('ISBN','NULL');
-        if($isbn == 'NULL')
-        {
-                $response = new Response(json_encode(array('MSG' => '-1')));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-        }
-        $em = $this->getDoctrine()->getManager();
-        $book = $em->getRepository('EnbabyDBManagerBundle:Books')->find($isbn);
-        $new = null;
-        if(!$book)
-        {
-                $book = new Books();
-                $new = 1;
-        }
-        $book->setISBN($isbn);
-        $book->setDisplayName($request->request->get('DisplayName'));
-        $book->setDescription($request->request->get('Description'));
-        $book->setLinkToBuy($request->request->get('LinkToBuy'));
-        $book->setSnapshot($request->request->get('Snapshot'));
-	$book->setAuthor($request->request->get('Author'));
-	$book->setAudioFiles($request->request->get('AudioFiles'));
-        $book->setRank($request->request->get('Rank'));
-
-        if($new) $em->persist($book);
-        $em->flush();
-
-        $response = new Response(json_encode(array('MSG' => '1')));
+        $response = new Response(json_encode(array('MSG' => '-1')));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
-
     }
-
-
-
-
-
-    public function removeAction(Request $request)
+    $em = $this->getDoctrine()->getManager();
+    $book = $em->getRepository('EnbabyDBManagerBundle:Books')->find($isbn);
+    $new = null;
+    if(!$book)
     {
+        $book = new Books();
+        $new = 1;
+    }
+    $book->setISBN($isbn);
+    $book->setDisplayName($request->request->get('DisplayName'));
+    $book->setDescription($request->request->get('Description'));
+    $book->setLinkToBuy($request->request->get('LinkToBuy'));
+    $book->setAuthor($request->request->get('Author'));
+    $book->setRank($request->request->get('Rank'));
+
+    if($new) $em->persist($book);
+    $em->flush();
+
+    $response = new Response(json_encode(array('MSG' => '1')));
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
+
+}
+
+
+
+
+
+
+public function removeAction(Request $request)
+{
 	$isbn = $request->request->get('ISBN','NULL');
 	if($isbn =='NULL')
 	{
@@ -91,56 +90,97 @@ class BooksController extends Controller
 	}else{
 		$em = $this->getDoctrine()->getManager();
 		$query = $em->createQuery('SELECT book.isbn FROM EnbabyDBManagerBundle:Books book WHERE book.isbn = :isbn')->setParameter('isbn', $isbn);
-        	$book = $query->getResult();
+     $book = $query->getResult();
 
-		if(!$book)
-		{
-			$response = new Response(json_encode(array('MSG' => '-1')));	
-		}else{
-			$query = $em->createQuery('DELETE FROM EnbabyDBManagerBundle:Books book WHERE book.isbn = :isbn')->setParameter('isbn',$isbn);
-			$query->execute();
-			$response = new Response(json_encode(array('MSG' => '1')));
-		}
-		$response->headers->set('Content-Type', 'application/json');
-	}
-	return $response;
-	
+     if(!$book)
+     {
+       $response = new Response(json_encode(array('MSG' => '-1')));	
+   }else{
+       $query = $em->createQuery('DELETE FROM EnbabyDBManagerBundle:Books book WHERE book.isbn = :isbn')->setParameter('isbn',$isbn);
+       $query->execute();
+       $response = new Response(json_encode(array('MSG' => '1')));
+   }
+   $response->headers->set('Content-Type', 'application/json');
 }
-	
-	
+return $response;
 
-	
-    public function snapshotuploadAction(Request $request)
+}
+
+
+
+
+public function snapshotuploadAction(Request $request)
+{
+    $isbn = $request->request->get('ISBN');
+    $file = $request->request->get('File');
+    $em = $this->getDoctrine()->getManager();
+    $book = $em->getRepository('EnbabyDBManagerBundle:Books')->findOneByIsbn($isbn);
+    $uploadedFile = WEBROOT . Uploads . $file;
+    if($book && file_exists($uploadedFile))
     {
-	$fileElementName = 'Snapshot';
-	$uploadFile = $request->files->get($fileElementName);
-	if($uploadFile->isValid())
-	{
-		$timeStamp = md5(time() . $uploadFile->getClientOriginalName());
-		$localFileName = $timeStamp . '.' . $uploadFile->guessExtension();
-		$file = $uploadFile->move(WEBROOT . SnapshotDB , $localFileName );
-		$response = new Response(json_encode(array('MSG' => '1', 'Location' =>  SnapshotDB . $localFileName)));
-
-	}else{
-		$response = new Response(json_encode(array('MSG'=> '-1')));
-	}
-	return $response;
+        $dest =SnapshotDB . $isbn . "_" . $file;
+        copy($uploadedFile, WEBROOT . $dest);
+        $book->setSnapshot($dest);
+        $em->flush();
+        $response = new Response(json_encode(array('MSG' => '1', 'Location' => $dest)));
+    }else{
+        $response = new Response(json_encode(array('MSG' => '-1')));
     }
 
-    public function audiouploadAction(Request $request)
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
+}
+
+public function audiouploadAction(Request $request)
+{
+
+    $isbn = $request->request->get('ISBN');
+    $file = $request->request->get('File');
+    $em = $this->getDoctrine()->getManager();
+    $book = $em->getRepository('EnbabyDBManagerBundle:Books')->findOneByIsbn($isbn);
+    $uploadedFile = WEBROOT . Uploads . $file;
+    if($book && file_exists($uploadedFile))
     {
-        $fileElementName = 'Audio';
-        $uploadFile = $request->files->get($fileElementName);
-        if($uploadFile->isValid())
+        $dest = AudioDB . $isbn . "_" . $file;
+        copy($uploadedFile, WEBROOT . $dest);
+        $audios = split(';',$book->getAudioFiles());
+        array_push($audios, $dest);
+        $book->setAudioFiles(join(';',$audios));
+        $em->flush();
+        $response = new Response(json_encode(array('MSG' => '1', 'Location' => $dest)));
+    }else{
+        $response = new Response(json_encode(array('MSG' => '-1')));
+    }
+
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
+}
+
+public function audioremoveAction(Request $request)
+{
+
+    $isbn = $request->request->get('ISBN');
+    $file = $request->request->get('remvoeLocation');
+    $em = $this->getDoctrine()->getManager();
+    $book = $em->getRepository('EnbabyDBManagerBundle:Books')->findOneByIsbn($isbn);
+    if($book)
+    {
+        $audios = split(';',$book->getAudioFiles());
+        $newAudios = array();
+        for($i = 0;$i<count($audios);$i++)
         {
-                $timeStamp = md5(time() . $uploadFile->getClientOriginalName());
-                $localFileName = $timeStamp . '.' . $uploadFile->guessExtension();
-                $file = $uploadFile->move(WEBROOT . AudioDB , $localFileName );
-                $response = new Response(json_encode(array('MSG' => '1', 'Location' =>  AudioDB . $localFileName)));
-
-        }else{
-                $response = new Response(json_encode(array('MSG'=> '-1')));
+            if($audios[$i] != $file)
+            {
+                array_push($newAudios,$audios[$i]);
+            }
         }
-        return $response;
+        $book->setAudioFiles(join(';',$newAudios ));
+        $em->flush();
+        $response = new Response(json_encode(array('MSG' => '1')));
+    }else{
+        $response = new Response(json_encode(array('MSG' => '-1')));
     }
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
+}
 }

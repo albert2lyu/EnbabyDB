@@ -1,6 +1,7 @@
 {% extends '::base.html.twig' %}
 {% block title %}Index of Series{% endblock %} 
 {% block javascript%}
+<script  src="/js/manager.js"> </script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#Save").click(function() {
@@ -10,7 +11,6 @@ $(document).ready(function() {
 			DisplayName : $("#DisplayName").val(),
 			Description : $("#Description").val(),
 			LinkToBuy : $("#LinkToBuy").val(),
-			Snapshot : $("#Snapshotimg").attr('src'),
 			Rank : $("#Rank").val()
 		}, function(data, textStatus, xhr) {
 			alert(textStatus);
@@ -31,44 +31,6 @@ $(document).ready(function() {
 		});
 	});		
 });
-
-function ajaxFileUpload()
-{
-	
-	$("#loading")
-	.ajaxStart(function(){
-		$(this).show();
-	})
-	.ajaxComplete(function(){
-		$(this).hide();
-	});
-	$.ajaxFileUpload({
-		url:"{{path('series_snapshotupload')}}", 
-		secureuri:false,
-		fileElementId:'fileToUpload',
-		dataType: 'json',
-		success: function (data, status)
-		{
-			if(typeof(data.MSG) != 'undefined')
-			{
-				if(data.MSG == '1')
-				{
-					alert(data.Location);
-					$("#Snapshotimg").attr('src',data.Location);
-				}else
-				{
-					alert("Upload failed!");
-				}
-			}
-		},
-		error: function (data, status, e)
-		{
-			alert(e);
-		}
-	})
-		
-	return false;
-}  
 </script>
 
 {% endblock %}
@@ -152,7 +114,7 @@ function ajaxFileUpload()
 					<span>Add files...</span>
 					<input id="fileToUpload"  type="file"  name="fileToUpload">
 				</span>
-				<button class="btn btn-info" id="buttonUpload" onclick="return ajaxFileUpload();">
+				<button class="btn btn-info" id="buttonUpload" onclick="return ajaxFileUpload('fileToUpload',refreshSeriesSnapshot);">
 					<i class="glyphicon glyphicon-upload"></i>
 					<span>Start upload</span>
 				</button>
