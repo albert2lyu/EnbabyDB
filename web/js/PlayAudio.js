@@ -2,9 +2,9 @@
 $(document).on("pageinit","#mobilePage",function( event ){
 
  	var audioSrc = document.audioFiles.split(";");
- 	if(audioSrc.length > 0)
+ 	if(document.audioFiles != "" && audioSrc.length > 0)
  	{
- 		$('<div><a id="playbookaudio" data-role="button">绘本试听(English)</a><audio id="bookaudio"></audio></div>').appendTo('#audioArea');
+ 		$('<div><a id="playbookaudio" data-role="button" class="ui-btn">绘本试听(English)</a><audio id="bookaudio"></audio></div>').appendTo('#audioArea');
  		for (var i = audioSrc.length - 1; i >= 0; i--) {
  		var source = $("<source></source>");
  		source.attr('src',audioSrc[i]);
@@ -14,9 +14,9 @@ $(document).on("pageinit","#mobilePage",function( event ){
  		
 
  	audioSrc = document.audioFiles_cn.split(";");
- 	if(audioSrc.length > 0)
+ 	if(document.audioFiles_cn != "" && audioSrc.length > 0)
  	{
- 		$('<div><a id="playbookaudio_cn" data-role="button">绘本试听(English)</a><audio id="bookaudio_cn"></audio></div>').appendTo('#audioArea');
+ 		$('<div><a id="playbookaudio_cn" data-role="button" class="ui-btn">绘本试听(Chinese)</a><audio id="bookaudio_cn"></audio></div>').appendTo('#audioArea');
  		for (var i = audioSrc.length - 1; i >= 0; i--) {
  		var source = $("<source></source>");
  		source.attr('src',audioSrc[i]);
