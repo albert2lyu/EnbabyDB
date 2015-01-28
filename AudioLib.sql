@@ -9,6 +9,7 @@ CREATE TABLE `Books` (
   `Snapshot`    text COLLATE utf8_unicode_ci,
   `Author`      varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `AudioFiles`       text COLLATE utf8_unicode_ci,
+  `AudioFiles_cn`    text COLLATE utf8_unicode_ci,
   `Rank`        INT DEFAULT 100,
   PRIMARY KEY (`ISBN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

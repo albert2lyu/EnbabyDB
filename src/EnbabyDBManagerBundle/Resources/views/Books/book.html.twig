@@ -6,7 +6,8 @@
 <script  src="/js/manager.js"> </script>
 <script type="text/javascript" >  
 $(document).ready(function() {
-	expandAudioFiles("{{book.AudioFiles}}");
+	expandAudioFiles($("#AudioFiles"),"{{book.AudioFiles}}");
+	expandAudioFiles($("#AudioFiles_cn"),"{{book.AudioFiles_cn}}");
 	$(document).on('click','.remove-audio-btn',function  () {
 		var audio = $(this).siblings("audio");
 		if(audio.attr('data-valid')=='true') {
@@ -14,7 +15,12 @@ $(document).ready(function() {
 			$(this).removeClass('btn-primary')
 			$(this).addClass('btn-danger');
 		}else{
-			removeBookAudio(audio.attr('data-src'),$(this).parent())
+			var lang = 'en';
+			if($(this).parent().parent().attr('id') == 'AudioFiles_cn')
+			{
+				lang = 'cn';
+			}
+			removeBookAudio(audio.attr('data-src'),lang,$(this).parent());
 		}
 	});
 	$("#Save").click(function() {
@@ -206,16 +212,16 @@ $(document).ready(function() {
 			</div>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">Audio</h3>
+					<h3 class="panel-title">Audio_EN</h3>
 				</div>
 				<div class="panel-body">
 					<div>
 						 <span class="btn btn-success fileinput-button">
 							<i class="glyphicon glyphicon-plus"></i>
 							<span>Add files...</span>
-							<input id="Audio" type="file"  name="Audio" >
+							<input id="Audio_en" type="file"  name="Audio" >
 						</span>
-						<button class="btn btn-info" id="AudioUpload" onclick="return ajaxFileUpload('Audio',uploadBookAudio);">
+						<button class="btn btn-info" id="AudioUpload" onclick="return ajaxFileUpload('Audio_en',uploadBookAudio);">
 							<i class="glyphicon glyphicon-upload"></i>
 							<span>Start upload</span>
 						</button>
@@ -225,6 +231,29 @@ $(document).ready(function() {
 					</div>
 				</div>
 			</div>
+
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Audio_CN</h3>
+				</div>
+				<div class="panel-body">
+					<div>
+						 <span class="btn btn-success fileinput-button">
+							<i class="glyphicon glyphicon-plus"></i>
+							<span>Add files...</span>
+							<input id="Audio_cn" type="file"  name="Audio" >
+						</span>
+						<button class="btn btn-info" id="AudioUpload" onclick="return ajaxFileUpload('Audio_cn',uploadBookAudio_cn);">
+							<i class="glyphicon glyphicon-upload"></i>
+							<span>Start upload</span>
+						</button>
+					</div>
+					<div id="AudioFiles_cn">
+						<label class="divider"></label>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</div>
 {%endblock%}

@@ -15,16 +15,16 @@ function joinAudioFiles()
 	return source.join(';');
 }
 
-function expandAudioFiles(sources)
+function expandAudioFiles(parent,sources)
 {
 	var source = sources.split(';');
 	for (var i = 0; i < source.length; i++) 
 	{
-		addAudio(source[i]);
+		addAudio(parent,source[i]);
 	}
 }
 
-function addAudio(source)
+function addAudio(parent,source)
 {
 	if(source!=''){
 		var container = $("<div style='position:relative'></div>");
@@ -34,7 +34,7 @@ function addAudio(source)
 		audio.attr('data-src',source);
 		container.append(audio);
 		container.append(removeBtn);
-		$("#AudioFiles").append(container);
+		parent.append(container);
 	}
 }
 
@@ -99,24 +99,45 @@ function uploadBookAudio(file)
 	{
 		File : file,
 		ISBN : $("#ISBN").val(),
+		Lang : 'en',
 	}, function(data, textStatus, xhr) {
 		/*optional stuff to do after success */
 		if(data.MSG =='1')
 		{
 			alert("Audio upload successfully!");
-			addAudio(data.Location);
+			addAudio($("#AudioFiles"),data.Location);
 		}else{
 			alert("Audio upload failed!");
 		}
 	});
 }
 
-function removeBookAudio(removeLocation,removeItem)
+function uploadBookAudio_cn(file)
 {
-	$.get(dev + '/manager/book/audioremove', 
+	$.post(dev + '/manager/book/audioupload', 
+	{
+		File : file,
+		ISBN : $("#ISBN").val(),
+		Lang : 'cn',
+	}, function(data, textStatus, xhr) {
+		/*optional stuff to do after success */
+		if(data.MSG =='1')
+		{
+			alert("Audio upload successfully!");
+			addAudio($("#AudioFiles_cn"),data.Location);
+		}else{
+			alert("Audio upload failed!");
+		}
+	});
+}
+
+function removeBookAudio(removeLocation,lang,removeItem)
+{
+	$.post(dev + '/manager/book/audioremove', 
 	{
 		remvoeLocation : removeLocation,
 		ISBN : $("#ISBN").val(),
+		Lang : lang,
 	}, function(data, textStatus, xhr) {
 		/*optional stuff to do after success */
 		if(data.MSG =='1')

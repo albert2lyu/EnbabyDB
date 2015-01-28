@@ -136,6 +136,7 @@ public function audiouploadAction(Request $request)
 
     $isbn = $request->request->get('ISBN');
     $file = $request->request->get('File');
+    $lang = $request->request->get('Lang','en');
     $em = $this->getDoctrine()->getManager();
     $book = $em->getRepository('EnbabyDBManagerBundle:Books')->findOneByIsbn($isbn);
     $uploadedFile = WEBROOT . Uploads . $file;
@@ -143,9 +144,17 @@ public function audiouploadAction(Request $request)
     {
         $dest = AudioDB . $isbn . "_" . $file;
         copy($uploadedFile, WEBROOT . $dest);
-        $audios = split(';',$book->getAudioFiles());
+        if($lang == 'en')
+        {
+          $audios = split(';',$book->getAudioFiles());
         array_push($audios, $dest);
         $book->setAudioFiles(join(';',$audios));
+        }else{
+          $audios = split(';',$book->getAudioFiles_cn());
+        array_push($audios, $dest);
+        $book->setAudioFiles_cn(join(';',$audios));
+        }
+        
         $em->flush();
         $response = new Response(json_encode(array('MSG' => '1', 'Location' => $dest)));
     }else{
@@ -161,10 +170,13 @@ public function audioremoveAction(Request $request)
 
     $isbn = $request->request->get('ISBN');
     $file = $request->request->get('remvoeLocation');
+    $lang = $request->request->get('Lang','en');
     $em = $this->getDoctrine()->getManager();
     $book = $em->getRepository('EnbabyDBManagerBundle:Books')->findOneByIsbn($isbn);
     if($book)
     {
+      if($lang == 'en')
+      {
         $audios = split(';',$book->getAudioFiles());
         $newAudios = array();
         for($i = 0;$i<count($audios);$i++)
@@ -175,6 +187,19 @@ public function audioremoveAction(Request $request)
             }
         }
         $book->setAudioFiles(join(';',$newAudios ));
+      }else{
+        $audios = split(';',$book->getAudioFiles_cn());
+        $newAudios = array();
+        for($i = 0;$i<count($audios);$i++)
+        {
+            if($audios[$i] != $file)
+            {
+                array_push($newAudios,$audios[$i]);
+            }
+        }
+        $book->setAudioFiles_cn(join(';',$newAudios ));
+      }
+        
         $em->flush();
         $response = new Response(json_encode(array('MSG' => '1')));
     }else{

@@ -47,6 +47,11 @@ class Books
      * @ORM\Column(name="AudioFiles", type="text")
      */
     protected $audioFiles;
+
+    /**
+     * @ORM\Column(name="AudioFiles_cn", type="text")
+     */
+    protected $audioFiles_cn;
    
     /**
      * @ORM\Column(name="Rank", type="integer")
@@ -214,6 +219,30 @@ class Books
     {
         return $this->audioFiles;
     }
+
+    /**
+     * Set audioFiles_cn
+     *
+     * @param string $audioFiles_cn
+     * @return Books
+     */
+    public function setAudioFiles_cn($audioFiles_cn)
+    {
+        $this->audioFiles_cn = $audioFiles_cn;
+
+        return $this;
+    }
+
+    /**
+     * Get audioFiles_cn
+     *
+     * @return string 
+     */
+    public function getAudioFiles_cn()
+    {
+        return $this->audioFiles_cn;
+    }
+
 
     /**
      * Set rank
