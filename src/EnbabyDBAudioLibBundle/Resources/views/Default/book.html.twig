@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block mobilePagejavascript %}
-<script type="text/javascript"> document.audioFiles = "{{book.audioFiles}}";</script>
+<script type="text/javascript"> document.audioFiles = "{{book.audioFiles}}";document.audioFiles_cn = "{{book.audioFiles_cn}}";</script>
 <script src="/js/PlayAudio.js"></script>
 {% endblock %}
 
@@ -23,11 +23,18 @@
 <p><strong>{{ book.DisplayName }}</strong></p>
 <p> <small>作者: </small><em>{{ book.Author }}</em></p>
 <p>{{ book.Description }}</p>
-
+<div id="audioArea">
 <div>
-	<a id="playbookaudio" data-role="button">《{{ book.DisplayName }}》绘本试听</a>
+	<a id="playbookaudio" data-role="button">绘本试听(English)</a>
 	<audio id="bookaudio">
 	</audio>
+</div>
+
+<div>
+	<a id="playbookaudio_cn" data-role="button">绘本试听(Chinese)</a>
+	<audio id="bookaudio_cn">
+	</audio>
+</div>
 </div>
 {% endblock %}
 

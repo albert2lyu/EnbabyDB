@@ -146,13 +146,25 @@ public function audiouploadAction(Request $request)
         copy($uploadedFile, WEBROOT . $dest);
         if($lang == 'en')
         {
-          $audios = split(';',$book->getAudioFiles());
-        array_push($audios, $dest);
-        $book->setAudioFiles(join(';',$audios));
+          if($book->getAudioFiles() == '')
+          {
+            $book->setAudioFiles($dest);
+          }else{
+            $audios = split(';',$book->getAudioFiles());
+            array_push($audios, $dest);
+            $book->setAudioFiles(join(';',$audios));
+          }
+          
         }else{
-          $audios = split(';',$book->getAudioFiles_cn());
-        array_push($audios, $dest);
-        $book->setAudioFiles_cn(join(';',$audios));
+          if($book->getAudioFiles_cn() == '')
+          {
+            $book->setAudioFiles_cn($dest);
+          }else{
+            $audios = split(';',$book->getAudioFiles_cn());
+            array_push($audios, $dest);
+            $book->setAudioFiles_cn(join(';',$audios));
+          }
+          
         }
         
         $em->flush();
@@ -181,7 +193,7 @@ public function audioremoveAction(Request $request)
         $newAudios = array();
         for($i = 0;$i<count($audios);$i++)
         {
-            if($audios[$i] != $file)
+            if($audios[$i] != $file && $audios[$i] != '')
             {
                 array_push($newAudios,$audios[$i]);
             }
@@ -192,7 +204,7 @@ public function audioremoveAction(Request $request)
         $newAudios = array();
         for($i = 0;$i<count($audios);$i++)
         {
-            if($audios[$i] != $file)
+            if($audios[$i] != $file && $audios[$i] != '' )
             {
                 array_push($newAudios,$audios[$i]);
             }
