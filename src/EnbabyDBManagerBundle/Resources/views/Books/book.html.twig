@@ -54,14 +54,15 @@ $(document).ready(function() {
 
 	$("#Link").click(function() {
 		var linkSeries = $("#select").val();
+		var seriesId = $("#select").val();
 		$.post('{{path("links_link")}}', 
 		{
 			ISBN: $("#ISBN").val(),
-			Id: $("#select").val(),
+			Id: seriesId,
 		}, function(data, textStatus, xhr) {
 			if(data.MSG == '1')
 			{
-				var newlinkSeries = $('<tr class="default"><td class="displayName"><a href="/manager/series/id/' + linkSeries + '">' + $("#" + linkSeries).html() + '</a></td><td><a class="btn-link">unlink</a></td></tr>');
+				var newlinkSeries = $('<tr class="default"><td class="displayName"><a href="/manager/series/id/' + linkSeries + '">' + $("#" + linkSeries).html() + '</a></td><td><a class="unlink btn-link" data-id="' + seriesId + '">unlink</a></td></tr>');
 				$("#table").find("tbody").append(newlinkSeries);
 				$("#" + linkSeries).remove();
 			}else{

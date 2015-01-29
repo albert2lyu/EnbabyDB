@@ -24,6 +24,29 @@
 <p> <small>作者: </small><em>{{ book.Author }}</em></p>
 <p>{{ book.Description }}</p>
 <div id="audioArea">
+	{% if audios_en %}
+		<div>
+			<a id="playbookaudio_en" data-role="button" >绘本试听(英语)</a>
+			<audio id="bookaudio_en">
+				{% for a_en in audios_en %}
+				<source src="{{a_en}}">
+				{% endfor %}
+			</audio>
+		</div>		
+	{% endif %}
+
+	{% if audios_cn %}
+		<div>
+			<a id="playbookaudio_cn" data-role="button" >绘本试听(中文)</a>
+			<audio id="bookaudio_cn">
+				{% for a_cn in audios_cn %}
+				<source src="{{a_cn}}">
+				{% endfor %}
+			</audio>
+		</div>		
+	{% endif %}
+
+
 </div>
 {% endblock %}
 

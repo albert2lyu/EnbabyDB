@@ -16,8 +16,22 @@ class BooksController extends Controller
 		if (!$book) {
 			throw $this->createNotFoundException('啊呀，怎么找不到了！');
 		}
+		$audio_en = $book->getAudioFiles();
+		$audio_cn = $book->getAudioFiles_cn();
 
-		return $this->render('EnbabyDBAudioLibBundle:Default:book.html.twig',array('book' => $book));
+		if($audio_en != '') {
+			$audios_en = split(';', $audio_en);
+		}else{
+			$audios_en = null;
+		}
+
+		if($audio_cn != '') {
+			$audios_cn = split(';', $audio_cn);
+		}else{
+			$audios_cn = null;
+		}
+		return $this->render('EnbabyDBAudioLibBundle:Default:book.html.twig',
+			array('book' => $book,'audios_en' => $audios_en,'audios_cn' => $audios_cn));
 	}
 
 }
