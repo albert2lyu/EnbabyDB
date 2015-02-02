@@ -16,7 +16,7 @@
 	<ul data-role="listview" data-inset="true">
 		<li data-role="divider" data-theme="b">书目</li>
 		{% for book in books%}
-		<li><a href="{{path('audiolib_books_info',{'isbn':book.isbn})}}" data-transition="slide">{{book.displayName}}</a></li>
+		<li><a href="{{path('audiolib_books_info',{'isbn':book.isbn})}}" data-ajax="false" data-transition="slide">{{book.displayName}}</a></li>
 		{%endfor%}
 	</ul>
 {% endblock %}

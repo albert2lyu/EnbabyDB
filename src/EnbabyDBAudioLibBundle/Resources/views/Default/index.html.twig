@@ -6,7 +6,7 @@
 	<ul data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="搜索专辑">
 		<li data-role="divider" data-theme="b">专辑</li>
 		{% for s in series%}
-		<li data-icon="audio"><a href="{{path('audiolib_series_info',{'seriesId':s.Id})}}" data-transition="slide">{{s.DisplayName}}</a></li>
+		<li data-icon="audio"><a href="{{path('audiolib_series_info',{'seriesId':s.Id})}}" data-ajax="false" data-transition="slide">{{s.DisplayName}}</a></li>
 		{%endfor%}
 	</ul>
 {% endblock %}
