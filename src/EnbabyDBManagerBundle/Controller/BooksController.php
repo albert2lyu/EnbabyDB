@@ -18,7 +18,7 @@ class BooksController extends Controller
     public function indexAction()
     {
        $em = $this->getDoctrine()->getManager();
-       $query = $em->createQuery('SELECT book.isbn,book.displayName FROM EnbabyDBManagerBundle:Books book');
+       $query = $em->createQuery('SELECT book.isbn,book.displayName FROM EnbabyDBManagerBundle:Books book ORDER BY book.displayName');
        $index = $query->getResult();
 
        return $this->render('EnbabyDBManagerBundle:Books:index.html.twig',array('index' => $index));	

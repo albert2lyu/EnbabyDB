@@ -118,12 +118,12 @@ $(document).ready(function() {
 					<i class="glyphicon glyphicon-upload"></i>
 					<span>Start upload</span>
 				</button>
-				<div><img id='Snapshotimg' src='{{series.Snapshot | default("/img/none.png")}}' width='100%'></div>
-
+				<div>
+					<label class="divider"></label>
+					<img id='Snapshotimg' src='{{series.Snapshot | default("/img/none.png")}}' width='100%'></div>
 			</div>
 		</div>
 	</div>
-		
 </div>
 {% endblock %}
 

@@ -26,29 +26,18 @@
 <p> <small>作者: </small><em>{{ book.Author }}</em></p>
 <p>{{ book.Description }}</p>
 <div id="audioArea">
-
 	{% if audios_en or audios_cn %}
-	<h3>绘本试听</h3>
+	<strong>绘本试听</strong>
 	{% endif %}
-
 	{% if audios_en %}
-	
-
 	<div class="sm2-bar-ui compact full-width">
-
 		<div class="bd sm2-main-controls">
-
 			<div class="sm2-inline-texture"></div>
 			<div class="sm2-inline-gradient"></div>
-
 			<div class="sm2-inline-element sm2-button-element">
-				<div class="sm2-button-bd">
-					<a href="#play" class="sm2-inline-button play-pause">Play / pause</a>
-				</div>
+				<div class="sm2-button-bd"><a href="#play" class="sm2-inline-button play-pause">Play / pause</a></div>
 			</div>
-
 			<div class="sm2-inline-element sm2-inline-status">
-
 				<div class="sm2-playlist">
 					<div class="sm2-playlist-target">
 						<!-- playlist <ul> + <li> markup will be injected here -->
@@ -56,7 +45,6 @@
 						<noscript><p>JavaScript is required.</p></noscript>
 					</div>
 				</div>
-
 				<div class="sm2-progress">
 					<div class="sm2-row">
 						<div class="sm2-inline-time">0:00</div>
@@ -69,26 +57,19 @@
 						<div class="sm2-inline-duration">0:00</div>
 					</div>
 				</div>
-
 			</div>
-
 			<div class="sm2-inline-element sm2-button-element sm2-volume">
 				<div class="sm2-button-bd">
 					<span class="sm2-inline-button sm2-volume-control volume-shade"></span>
 					<a href="#volume" class="sm2-inline-button sm2-volume-control">volume</a>
 				</div>
 			</div>
-
 		</div>
-
 		<div class="bd sm2-playlist-drawer sm2-element">
-
 			<div class="sm2-inline-texture">
 				<div class="sm2-box-shadow"></div>
 			</div>
-
 			<!-- playlist content is mirrored here -->
-
 			<div class="sm2-playlist-wrapper">
 				<ul class="sm2-playlist-bd">
 				{% for a_en in audios_en %}
@@ -96,29 +77,18 @@
 				{% endfor %}
 				</ul>
 			</div>
-
 		</div>
-
 	</div>
 	{% endif %}
-
 	{% if audios_cn %}
-
 	<div class="sm2-bar-ui compact full-width">
-
 		<div class="bd sm2-main-controls">
-
 			<div class="sm2-inline-texture"></div>
 			<div class="sm2-inline-gradient"></div>
-
 			<div class="sm2-inline-element sm2-button-element">
-				<div class="sm2-button-bd">
-					<a href="#play" class="sm2-inline-button play-pause">Play / pause</a>
-				</div>
+				<div class="sm2-button-bd"><a href="#play" class="sm2-inline-button play-pause">Play / pause</a></div>
 			</div>
-
 			<div class="sm2-inline-element sm2-inline-status">
-
 				<div class="sm2-playlist">
 					<div class="sm2-playlist-target">
 						<!-- playlist <ul> + <li> markup will be injected here -->
@@ -126,7 +96,6 @@
 						<noscript><p>JavaScript is required.</p></noscript>
 					</div>
 				</div>
-
 				<div class="sm2-progress">
 					<div class="sm2-row">
 						<div class="sm2-inline-time">0:00</div>
@@ -139,26 +108,19 @@
 						<div class="sm2-inline-duration">0:00</div>
 					</div>
 				</div>
-
 			</div>
-
 			<div class="sm2-inline-element sm2-button-element sm2-volume">
 				<div class="sm2-button-bd">
 					<span class="sm2-inline-button sm2-volume-control volume-shade"></span>
 					<a href="#volume" class="sm2-inline-button sm2-volume-control">volume</a>
 				</div>
 			</div>
-
 		</div>
-
 		<div class="bd sm2-playlist-drawer sm2-element">
-
 			<div class="sm2-inline-texture">
 				<div class="sm2-box-shadow"></div>
 			</div>
-
 			<!-- playlist content is mirrored here -->
-
 			<div class="sm2-playlist-wrapper">
 				<ul class="sm2-playlist-bd">
 				{% for a_cn in audios_cn %}
@@ -166,13 +128,9 @@
 				{% endfor %}
 				</ul>
 			</div>
-
 		</div>
-
 	</div>
 	{% endif %}
-
-
 </div>
 {% endblock %}
 
