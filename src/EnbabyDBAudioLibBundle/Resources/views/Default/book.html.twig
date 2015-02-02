@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block javascript %}
+<script type="text/javascript" src="/js/soundmanager2.js"></script>
+<script src="/js/bar-ui.js"></script>
+<link rel="stylesheet" href="/css/bar-ui.css" />
 {% endblock %}
 
 {% block mobilePagejavascript %}
@@ -24,26 +27,150 @@
 <p> <small>作者: </small><em>{{ book.Author }}</em></p>
 <p>{{ book.Description }}</p>
 <div id="audioArea">
+
+	{% if audios_en or audios_cn %}
+	<h3>绘本试听</h3>
+	{% endif %}
+
 	{% if audios_en %}
-		<div>
-			<a id="playbookaudio_en" data-role="button" >绘本试听(英语)</a>
-			<audio id="bookaudio_en">
+	
+
+	<div class="sm2-bar-ui compact full-width">
+
+		<div class="bd sm2-main-controls">
+
+			<div class="sm2-inline-texture"></div>
+			<div class="sm2-inline-gradient"></div>
+
+			<div class="sm2-inline-element sm2-button-element">
+				<div class="sm2-button-bd">
+					<a href="#play" class="sm2-inline-button play-pause">Play / pause</a>
+				</div>
+			</div>
+
+			<div class="sm2-inline-element sm2-inline-status">
+
+				<div class="sm2-playlist">
+					<div class="sm2-playlist-target">
+						<!-- playlist <ul> + <li> markup will be injected here -->
+						<!-- if you want default / non-JS content, you can put that here. -->
+						<noscript><p>JavaScript is required.</p></noscript>
+					</div>
+				</div>
+
+				<div class="sm2-progress">
+					<div class="sm2-row">
+						<div class="sm2-inline-time">0:00</div>
+						<div class="sm2-progress-bd">
+							<div class="sm2-progress-track">
+								<div class="sm2-progress-bar"></div>
+								<div class="sm2-progress-ball"><div class="icon-overlay"></div></div>
+							</div>
+						</div>
+						<div class="sm2-inline-duration">0:00</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="sm2-inline-element sm2-button-element sm2-volume">
+				<div class="sm2-button-bd">
+					<span class="sm2-inline-button sm2-volume-control volume-shade"></span>
+					<a href="#volume" class="sm2-inline-button sm2-volume-control">volume</a>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="bd sm2-playlist-drawer sm2-element">
+
+			<div class="sm2-inline-texture">
+				<div class="sm2-box-shadow"></div>
+			</div>
+
+			<!-- playlist content is mirrored here -->
+
+			<div class="sm2-playlist-wrapper">
+				<ul class="sm2-playlist-bd">
 				{% for a_en in audios_en %}
-				<source src="{{a_en}}">
+					<li><a href="{{a_en}}"><b>(英语)</b>{{book.DisplayName}}</a></li>
 				{% endfor %}
-			</audio>
-		</div>		
+				</ul>
+			</div>
+
+		</div>
+
+	</div>
 	{% endif %}
 
 	{% if audios_cn %}
-		<div>
-			<a id="playbookaudio_cn" data-role="button" >绘本试听(中文)</a>
-			<audio id="bookaudio_cn">
+
+	<div class="sm2-bar-ui compact full-width">
+
+		<div class="bd sm2-main-controls">
+
+			<div class="sm2-inline-texture"></div>
+			<div class="sm2-inline-gradient"></div>
+
+			<div class="sm2-inline-element sm2-button-element">
+				<div class="sm2-button-bd">
+					<a href="#play" class="sm2-inline-button play-pause">Play / pause</a>
+				</div>
+			</div>
+
+			<div class="sm2-inline-element sm2-inline-status">
+
+				<div class="sm2-playlist">
+					<div class="sm2-playlist-target">
+						<!-- playlist <ul> + <li> markup will be injected here -->
+						<!-- if you want default / non-JS content, you can put that here. -->
+						<noscript><p>JavaScript is required.</p></noscript>
+					</div>
+				</div>
+
+				<div class="sm2-progress">
+					<div class="sm2-row">
+						<div class="sm2-inline-time">0:00</div>
+						<div class="sm2-progress-bd">
+							<div class="sm2-progress-track">
+								<div class="sm2-progress-bar"></div>
+								<div class="sm2-progress-ball"><div class="icon-overlay"></div></div>
+							</div>
+						</div>
+						<div class="sm2-inline-duration">0:00</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="sm2-inline-element sm2-button-element sm2-volume">
+				<div class="sm2-button-bd">
+					<span class="sm2-inline-button sm2-volume-control volume-shade"></span>
+					<a href="#volume" class="sm2-inline-button sm2-volume-control">volume</a>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="bd sm2-playlist-drawer sm2-element">
+
+			<div class="sm2-inline-texture">
+				<div class="sm2-box-shadow"></div>
+			</div>
+
+			<!-- playlist content is mirrored here -->
+
+			<div class="sm2-playlist-wrapper">
+				<ul class="sm2-playlist-bd">
 				{% for a_cn in audios_cn %}
-				<source src="{{a_cn}}">
+					<li><a href="{{a_cn}}"><b>(中文)</b>{{book.DisplayName}}</a></li>
 				{% endfor %}
-			</audio>
-		</div>		
+				</ul>
+			</div>
+
+		</div>
+
+	</div>
 	{% endif %}
 
 
