@@ -12,8 +12,11 @@ class SeriesController extends Controller
 
   public function indexAction()
   {
-    // $series = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findAll()->orderByRank();
-    $series = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findBy([], ['displayName' => 'ASC']);
+    // $series = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findAll();
+    // $series = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findBy([], ['rank' => 'ASC']);
+    $em = $this->getDoctrine()->getManager();
+    $query = $em->createQuery('SELECT series FROM EnbabyDBManagerBundle:Series series ORDER BY series.rank');
+    $series = $query->getResult();
     return $this->render('EnbabyDBAudioLibBundle:Default:index.html.twig',array('series' => $series));
   }
 
