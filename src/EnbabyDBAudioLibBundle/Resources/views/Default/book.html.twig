@@ -5,14 +5,13 @@
 {% endblock %}
 
 {% block javascript %}
-<script type="text/javascript" src="/js/soundmanager2.js"></script>
-<script src="/js/bar-ui.js"></script>
-<link rel="stylesheet" href="/css/bar-ui.css" />
+
 {% endblock %}
 
 {% block mobilePagejavascript %}
-<script type="text/javascript"> document.audioFiles = "{{book.audioFiles}}";document.audioFiles_cn = "{{book.audioFiles_cn}}";</script>
-<script src="/js/PlayAudio.js"></script>
+<script type="text/javascript" src="/js/soundmanager2-nodebug-jsmin.js"></script>
+<script src="/js/bar-ui.js"></script>
+<link rel="stylesheet" href="/css/bar-ui.css" />
 {% endblock %}
 
 {% block header %}
