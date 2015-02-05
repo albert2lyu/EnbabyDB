@@ -60,4 +60,15 @@ links_unlink:
 
 file_upload:
     path:    /upload
-    defaults: { _controller: EnbabyDBManagerBundle:Upload:upload}
+    defaults: { _controller: EnbabyDBManagerBundle:Upload:upload }
+
+manager_login:
+    path:    /login
+    defaults: { _controller: EnbabyDBManagerBundle:Security:login }
+
+manager_login_check:
+    path:    /checklogin
+
+manager_logout:
+    path:    /logout
+

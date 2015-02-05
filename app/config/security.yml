@@ -3,7 +3,10 @@
 security:
     # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+    #    Symfony\Component\Security\Core\User\User: plaintext
+         Symfony\Component\Security\Core\User\User: 
+            algorithm: bcrypt
+            cost: 12
 
     # http://symfony.com/doc/current/book/security.html#hierarchical-roles
     role_hierarchy:
@@ -17,6 +20,9 @@ security:
                 users:
                     user:  { password: userpass, roles: [ 'ROLE_USER' ] }
                     admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+                    manager:
+                        password: $2y$12$7Rj4jMJwGX68.gaLD.g6iejT314mnRZPe0pyn8HWfSBPxFY.FopZ.
+                        roles: 'ROLE_MANAGER'
 
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
@@ -45,8 +51,25 @@ security:
             #http_basic:
             #    realm: "Secured Demo Area"
 
+        manager_login_area:
+            pattern:    ^/manager/login
+            anonymous: ~
+            
+        manager_area:
+            pattern:    ^/manager/
+            form_login: 
+                login_path: manager_login
+                check_path: manager_login_check
+            logout:
+                path: manager_logout
+                target: manager_login   
+
+        
+
     # with these settings you can restrict or allow access for different parts
     # of your application based on roles, ip, host or methods
     # http://symfony.com/doc/current/cookbook/security/access_control.html
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/manager/login,roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/manager/, roles: ROLE_MANAGER }
