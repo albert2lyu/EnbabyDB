@@ -1,5 +1,5 @@
-// var dev = "";
-var dev = "/app_dev.php";
+var dev = "";
+// var dev = "/app_dev.php";
 
 function joinAudioFiles()
 {

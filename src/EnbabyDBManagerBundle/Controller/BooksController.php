@@ -49,7 +49,8 @@ class BooksController extends Controller
       $isbn = $request->request->get('ISBN');
 
       $em = $this->getDoctrine()->getManager();
-      $query = $em->createQuery('SELECT book.isbn FROM EnbabyDBManagerBundle:Books book');
+      $query = $em->createQuery('SELECT book.isbn FROM EnbabyDBManagerBundle:Books book WHERE book.isbn = :isbn')
+            ->setParameter('isbn', $isbn);
       $book = $query->getResult();
       if($book)
       {
