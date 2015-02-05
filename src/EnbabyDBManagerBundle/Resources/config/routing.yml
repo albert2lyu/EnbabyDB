@@ -22,6 +22,10 @@ books_index:
     path:     /books
     defaults: { _controller: EnbabyDBManagerBundle:Books:index }
 
+books_has:
+    path:     /book/has
+    defaults: { _controller: EnbabyDBManagerBundle:Books:has }
+
 books_info:
     path:     /book/isbn/{isbn}
     defaults: { _controller: EnbabyDBManagerBundle:Books:book }

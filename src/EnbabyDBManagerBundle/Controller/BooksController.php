@@ -15,6 +15,8 @@ DEFINE("Uploads","/AudioLib/uploads/");
 
 class BooksController extends Controller
 {
+
+  
     public function indexAction()
     {
        $em = $this->getDoctrine()->getManager();
@@ -31,6 +33,7 @@ class BooksController extends Controller
        if(!$book)
        {
           $book = new Books();
+          if(preg_match('/^978.*$/', $isbn))   $book->setISBN($isbn);
           $unlink = $this->getDoctrine()->getRepository('EnbabyDBManagerBundle:Series')->findAll();
           $link = array();
       }else{
@@ -39,6 +42,24 @@ class BooksController extends Controller
           $unlink = $lc->getSeriesNotLinkToBook($isbn); 
       }
       return $this->render('EnbabyDBManagerBundle:Books:book.html.twig',array('book' => $book,'link' => $link,'unlink' => $unlink));
+    }
+
+    public function hasAction(Request $request)
+    {
+      $isbn = $request->request->get('ISBN');
+
+      $em = $this->getDoctrine()->getManager();
+      $query = $em->createQuery('SELECT book.isbn FROM EnbabyDBManagerBundle:Books book');
+      $book = $query->getResult();
+      if($book)
+      {
+        $response = new Response(json_encode(array('MSG' => '1')));
+      }else{
+        $response = new Response(json_encode(array('MSG' => '-1')));
+      }
+      $response->headers->set('Content-Type', 'application/json');
+      return $response;
+
     }
 
 public function updateAction(Request $request)

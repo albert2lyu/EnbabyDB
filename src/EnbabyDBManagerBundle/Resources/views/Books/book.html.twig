@@ -23,6 +23,24 @@ $(document).ready(function() {
 			removeBookAudio(audio.attr('data-src'),lang,$(this).parent());
 		}
 	});
+
+	$("#ISBN").focusout(function() {
+		/* Act on the event */
+		var isbn = $.trim($(this).val());
+		if(isbn != '')
+		$.post('{{path("books_has")}}',
+			{
+				ISBN : isbn,
+			}, function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			if(data.MSG == '1') {
+				window.location.href= "/manager/book/isbn/" + isbn; 
+			}
+		});
+	});
+
+
+
 	$("#Save").click(function() {
 		$.post('{{path("books_update")}}', 
 		{

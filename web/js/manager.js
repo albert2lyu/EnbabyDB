@@ -1,5 +1,5 @@
-var dev = "";
-// var dev = "/app_dev.php";
+// var dev = "";
+var dev = "/app_dev.php";
 
 function joinAudioFiles()
 {
@@ -85,7 +85,7 @@ function refreshBookSnapshot(file)
 		/*optional stuff to do after success */
 		if(data.MSG =='1')
 		{
-			alert("Snapshot upload successfully!");
+			// alert("Snapshot upload successfully!");
 			$("#Snapshotimg").attr('src',data.Location);
 		}else{
 			alert("Snapshot upload failed!");
@@ -104,7 +104,7 @@ function uploadBookAudio(file)
 		/*optional stuff to do after success */
 		if(data.MSG =='1')
 		{
-			alert("Audio upload successfully!");
+			// alert("Audio upload successfully!");
 			addAudio($("#AudioFiles"),data.Location);
 		}else{
 			alert("Audio upload failed!");
@@ -123,7 +123,7 @@ function uploadBookAudio_cn(file)
 		/*optional stuff to do after success */
 		if(data.MSG =='1')
 		{
-			alert("Audio upload successfully!");
+			// alert("Audio upload successfully!");
 			addAudio($("#AudioFiles_cn"),data.Location);
 		}else{
 			alert("Audio upload failed!");
@@ -142,7 +142,7 @@ function removeBookAudio(removeLocation,lang,removeItem)
 		/*optional stuff to do after success */
 		if(data.MSG =='1')
 		{
-			alert("Audio remove successfully!");
+			// alert("Audio remove successfully!");
 			removeItem.remove();
 		}else{
 			alert("Audio remove failed!");
@@ -162,7 +162,7 @@ function refreshSeriesSnapshot(file)
 		/*optional stuff to do after success */
 		if(data.MSG =='1')
 		{
-			alert("Snapshot upload successfully!");
+			// alert("Snapshot upload successfully!");
 			$("#Snapshotimg").attr('src',data.Location);
 		}else{
 			alert("Snapshot upload failed!");
