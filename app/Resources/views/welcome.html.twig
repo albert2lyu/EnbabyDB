@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta name="application-name" content="EnBabyDB"/>
+		<title>{% block title %}欢迎来到英贝网!{% endblock %}</title> 
+      		<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+      		<script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+      		<script type="text/javascript" src="/js/ajaxfileupload.js"></script>
+      		<link rel="stylesheet" type="text/css" href="/css/ajaxfileupload.css">
+      		{% block stylesheets %}{% endblock %}
+      		<!-- Latest compiled and minified CSS -->
+		<link href="/css/bootstrap.min.css" rel="stylesheet">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="/js/bootstrap.min.js"></script>
+		{% block javascript %}
+		{% endblock %}  
+    </head>
+    <body>
+    	{% block body %}
+    	{% endblock %}
+	{% block footerjavascript %}
+	{% endblock %}  
+    </body>
+</html>

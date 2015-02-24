@@ -13,3 +13,7 @@ audiolib_books_index:
 audiolib_books_info:
     pattern: /book/{isbn}
     defaults: { _controller: EnbabyDBAudioLibBundle:Books:book}
+
+audiolib_pc_welcome:
+    pattern: /welcome/pc
+    defaults: { _controller: EnbabyDBAudioLibBundle:Welcome:pc}

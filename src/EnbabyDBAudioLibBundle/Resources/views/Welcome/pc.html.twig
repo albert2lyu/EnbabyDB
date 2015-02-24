@@ -1,0 +1,32 @@
+{% extends '::welcome.html.twig' %}
+
+{% block body %}
+
+
+<div class="container">
+	<div class="col-lg-8 col-lg-offset-2">
+		<div class="alert alert-dismissible alert-success">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<h4>友情提示</h4>
+			<p>您访问的网站更适合使用手机浏览，使用微信扫一扫获得更佳浏览体验！</p>
+		</div>
+	</div>
+
+
+
+
+</div>
+
+<div class="container">
+	<div class="jumbotron">
+  <h1>微信二维码</h1>
+  <p>
+  	<img src="/image/qrcode.png" width="300" height="300"></img> 
+  </p>
+  <p><a class="btn btn-primary btn-lg"  href="{{path('audiolib_series_index')}}">继续使用电脑访问</a></p>
+</div>
+</div>
+
+
+
+{%endblock%}
